@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGR Leave Management 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#1E3A5F;--gold:#D4A017;--teal:#1F7A8C;--green:#1A7A3C;
+  --red:#C00000;--orange:#E26B0A;--purple:#7030A0;--blue:#2E5C8A;
+  --bg:#EEF2F7;--card:#FFFFFF;--border:#DDE3EC;
+  --text:#1a2535;--muted:#6B7A99;--light:#F8FAFC;
+}
+html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:224px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+.logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-initials{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"DM Serif Display",serif;font-size:16px;color:var(--navy);font-weight:bold}
+.logo-text{font-family:"DM Serif Display",serif;color:#fff;font-size:17px}
+.logo-sub{color:rgba(212,160,23,.8);font-size:10px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;margin-top:6px}
+.nav{padding:14px 0;flex:1}
+.nav-section{padding:8px 20px 4px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;border-left:3px solid transparent;user-select:none}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-item.active{color:#fff;background:rgba(255,255,255,.1);border-left-color:var(--gold)}
+.nav-icon{font-size:15px;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;min-width:20px;text-align:center}
+.sidebar-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.35);font-size:11px;line-height:1.6}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:54px;display:flex;align-items:center;gap:14px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.topbar-title{font-family:"DM Serif Display",serif;font-size:19px;color:var(--navy)}
+.topbar-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+.content{flex:1;overflow-y:auto;padding:26px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;font-family:"DM Sans",sans-serif;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:#274e7a}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#1e8f44}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#b8900f}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:#a00000}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{background:var(--bg)}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:#196878}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px}
+.btn-xs{padding:3px 9px;font-size:11px;border-radius:5px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px}
+.card-sm{padding:14px}
+.card-title{font-family:"DM Serif Display",serif;font-size:16px;color:var(--navy);margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.kpi:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.c-navy::before{background:var(--navy)}.kpi.c-teal::before{background:var(--teal)}
+.kpi.c-green::before{background:var(--green)}.kpi.c-gold::before{background:var(--gold)}
+.kpi.c-orange::before{background:var(--orange)}.kpi.c-red::before{background:var(--red)}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.kpi-value{font-family:"DM Serif Display",serif;font-size:26px;color:var(--navy);line-height:1}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* SEARCH */
+.search-box{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.search-box input{border:none;background:none;outline:none;font-size:13px;font-family:"DM Sans",sans-serif;color:var(--text);width:200px}
+.search-box input::placeholder{color:var(--muted)}
+
+/* FILTER CHIPS */
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chip{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .15s;user-select:none}
+.chip:hover{border-color:var(--navy);color:var(--navy)}
+.chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--light);padding:9px 13px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+.tbl th:hover{color:var(--navy)}
+.tbl td{padding:10px 13px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:var(--light);cursor:pointer}
+.emp-name{font-weight:500;color:var(--navy)}
+.emp-pos{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* DEPT BADGE */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.b-Admin{background:#EBF5FF;color:#1565C0}.b-BAT{background:#FFF3E0;color:#BF360C}
+.b-FMCG{background:#E8F5E9;color:#2E7D32}.b-Finance{background:#F3E5F5;color:#6A1B9A}
+.b-LOGISTICS{background:#FCE4EC;color:#B71C1C}
+
+/* BALANCE BAR */
+.bal-wrap{display:flex;align-items:center;gap:8px}
+.bal-bar{height:5px;border-radius:3px;background:var(--border);width:64px;overflow:hidden;flex-shrink:0}
+.bal-fill{height:100%;border-radius:3px}
+.bal-val{font-size:12px;font-weight:700;min-width:36px;text-align:right}
+.pos{color:var(--green)}.low{color:var(--orange)}.neg{color:var(--red)}.zero{color:var(--muted)}
+
+/* MONTH DOTS */
+.mdots{display:flex;gap:2px}
+.mdot{width:11px;height:11px;border-radius:2px;background:var(--border)}
+.mdot.act{background:var(--teal)}.mdot.pln{background:#C5B3DC}.mdot.both{background:linear-gradient(135deg,var(--teal) 50%,var(--purple) 50%)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(10,18,35,.55);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--card);border-radius:16px;width:760px;max-width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.25);display:flex;flex-direction:column}
+.modal-head{padding:22px 26px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:2;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-title{font-family:"DM Serif Display",serif;font-size:21px;color:var(--navy)}
+.modal-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--muted);line-height:1;padding:2px}.modal-close:hover{color:var(--text)}
+.modal-body{padding:22px 26px;flex:1}
+.modal-footer{padding:14px 26px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:var(--card)}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.fc{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-family:"DM Sans",sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .15s;width:100%}
+.fc:focus{border-color:var(--navy)}.fc:read-only{background:var(--bg);color:var(--muted)}
+.fc select{border:none;background:none;width:100%;outline:none;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--text)}
+.sec-head{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--navy);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-head::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* MONTH GRID */
+.mgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:6px}
+.mi-wrap{display:flex;flex-direction:column;gap:3px}
+.mi-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;text-align:center}
+.mi{border:1.5px solid var(--border);border-radius:6px;padding:6px 4px;font-size:14px;font-weight:600;text-align:center;font-family:"DM Sans",sans-serif;color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.mi:focus{border-color:var(--teal)}.mi.pln:focus{border-color:var(--purple)}
+
+/* CHECKER */
+.chk-result{border-radius:12px;padding:20px;text-align:center;margin-top:14px}
+.chk-approved{background:#E8F5E9;border:2px solid var(--green)}
+.chk-declined{background:#FFEBEE;border:2px solid var(--red)}
+.chk-idle{background:var(--light);border:1px solid var(--border)}
+.chk-verdict{font-family:"DM Serif Display",serif;font-size:22px;margin-bottom:4px}
+
+/* REQUESTS */
+.req-card{border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s}
+.req-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.req-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.req-info{flex:1}
+.req-name{font-weight:600;color:var(--navy);font-size:14px}
+.req-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.req-days{font-family:"DM Serif Display",serif;font-size:22px;color:var(--navy);margin-right:4px}
+.req-actions{display:flex;gap:7px;flex-shrink:0}
+.status-badge{padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.4px}
+.s-pending{background:#FFF3E0;color:var(--orange)}.s-approved{background:#E8F5E9;color:var(--green)}.s-declined{background:#FFEBEE;color:var(--red)}
+
+/* PORTAL */
+.portal-card{max-width:560px;margin:0 auto}
+
+/* ANALYTICS */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mbar-row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:5px}
+.mbar-lbl{width:28px;color:var(--muted);font-weight:600;text-align:right;flex-shrink:0}
+.mbar-track{flex:1;height:16px;background:var(--border);border-radius:4px;overflow:hidden;display:flex}
+.mbar-act{background:var(--teal);height:100%}.mbar-pln{background:var(--purple);opacity:.35;height:100%}
+.mbar-val{width:36px;text-align:right;color:var(--muted);flex-shrink:0}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.sum-row:last-child{border-bottom:none}
+
+/* TOAST */
+.toast-wrap{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--navy);color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 8px 28px rgba(0,0,0,.2);animation:tIn .2s ease;max-width:300px}
+.toast.success{background:var(--green)}.toast.error{background:var(--red)}
+@keyframes tIn{from{transform:translateX(110%);opacity:0}to{transform:none;opacity:1}}
+@keyframes tOut{to{transform:translateX(110%);opacity:0}}
+.toast.out{animation:tOut .25s ease forwards}
+
+/* MISC */
+.page{display:none}.page.active{display:block}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-icon{font-size:40px;margin-bottom:10px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600}
+.tag-red{background:#FFEBEE;color:var(--red)}.tag-green{background:#E8F5E9;color:var(--green)}
+.tag-orange{background:#FFF3E0;color:var(--orange)}.tag-muted{background:var(--border);color:var(--muted)}
+.dropdown-list{border:1px solid var(--border);border-radius:8px;margin-top:4px;display:none;max-height:200px;overflow-y:auto;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.dropdown-item{padding:9px 13px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);transition:background .1s}
+.dropdown-item:last-child{border-bottom:none}.dropdown-item:hover{background:var(--light)}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.info-box{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px}
+.info-box-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.info-box-val{font-size:18px;font-family:"DM Serif Display",serif;color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-initials">S</div>
+      <div class="logo-text">Salvo Grima</div>
+    </div>
+    <div class="logo-sub">Leave Management · 2026</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">HR Admin</div>
+    <div class="nav-item active" data-page="dashboard" onclick="nav(this)"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" data-page="employees" onclick="nav(this)"><span class="nav-icon">👥</span>Employees</div>
+    <div class="nav-item" data-page="requests" onclick="nav(this)"><span class="nav-icon">📋</span>Leave Requests<span class="nav-badge" id="req-badge">0</span></div>
+    <div class="nav-item" data-page="checker" onclick="nav(this)"><span class="nav-icon">✅</span>Leave Checker</div>
+    <div class="nav-item" data-page="analytics" onclick="nav(this)"><span class="nav-icon">📈</span>Analytics</div>
+    <div class="nav-section" style="margin-top:8px">Tools</div>
+    <div class="nav-item" data-page="portal" onclick="nav(this)"><span class="nav-icon">🔗</span>Employee Portal</div>
+  </nav>
+  <div class="sidebar-footer">SGR114 · Mark Mugarura<br>HR Admin · Data stored locally</div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Dashboard</div>
+    <div class="topbar-actions">
+      <div class="search-box" id="topbar-search" style="display:none">
+        <span style="color:var(--muted)">🔍</span>
+        <input type="text" id="emp-search-top" placeholder="Search employees…" oninput="renderEmpTable()">
+      </div>
+      <button class="btn btn-primary" id="add-emp-btn" style="display:none" onclick="openAddModal()">+ Add Employee</button>
+      <button class="btn btn-gold" onclick="exportExcel()">⬇ Export CSV</button>
+      <button class="btn btn-primary" onclick="downloadFormatted()">📊 Formatted Excel</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="kpi-grid" id="kpis"></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px">
+        <div class="card">
+          <div class="card-title">Monthly Leave Activity</div>
+          <div class="card-sub">Actual taken vs planned — all staff, 2026</div>
+          <div id="monthly-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Department Overview</div>
+          <div class="card-sub">Staff, taken and balance by department</div>
+          <div id="dept-overview"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <div class="card-title" style="margin-bottom:10px">Alerts & Actions Required</div>
+        <div id="alerts"></div>
+      </div>
+    </div>
+
+    <!-- EMPLOYEES -->
+    <div class="page" id="page-employees">
+      <div class="filter-row" id="dept-chips"></div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <div>
+            <span style="font-weight:600;color:var(--navy)" id="emp-count">99 employees</span>
+            <span style="font-size:12px;color:var(--muted);margin-left:8px">Click row to edit leave</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl">
+            <thead><tr>
+              <th onclick="sort('id')">ID ↕</th>
+              <th onclick="sort('name')">Name ↕</th>
+              <th>Dept</th>
+              <th onclick="sort('entitled')">Entitled ↕</th>
+              <th onclick="sort('taken')">Taken YTD ↕</th>
+              <th onclick="sort('balance')">Balance ↕</th>
+              <th>Months</th>
+              <th></th>
+            </tr></thead>
+            <tbody id="emp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUESTS -->
+    <div class="page" id="page-requests">
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <button class="btn btn-outline active" id="rf-all" onclick="filterReqs('all',this)">All</button>
+        <button class="btn btn-outline" id="rf-pending" onclick="filterReqs('pending',this)">Pending</button>
+        <button class="btn btn-outline" id="rf-approved" onclick="filterReqs('approved',this)">Approved</button>
+        <button class="btn btn-outline" id="rf-declined" onclick="filterReqs('declined',this)">Declined</button>
+      </div>
+      <div id="req-list"></div>
+    </div>
+
+    <!-- CHECKER -->
+    <div class="page" id="page-checker">
+      <div style="max-width:520px;margin:0 auto">
+        <div class="card">
+          <div class="card-title">Leave Request Checker</div>
+          <div class="card-sub">Verify if an employee has enough balance for a request</div>
+          <div class="fg" style="margin-bottom:12px">
+            <label>Employee</label>
+            <input type="text" class="fc" id="chk-inp" placeholder="Name or ID…" oninput="chkSearch()" autocomplete="off">
+            <div class="dropdown-list" id="chk-dd"></div>
+          </div>
+          <div id="chk-sel" style="display:none;margin-bottom:12px">
+            <div style="background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px">
+              <div id="chk-sel-name" style="font-weight:600;color:var(--navy)"></div>
+              <div id="chk-sel-det" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+            </div>
+          </div>
+          <div class="fg" style="margin-bottom:14px">
+            <label>Days Requested</label>
+            <input type="number" class="fc" id="chk-days" placeholder="e.g. 5" min="0" step="0.5" oninput="runChecker()">
+          </div>
+          <div class="chk-result chk-idle" id="chk-result">
+            <div class="chk-verdict" style="color:var(--muted)">—</div>
+            <div style="font-size:13px;color:var(--muted)">Select an employee and enter days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="page" id="page-analytics">
+      <div class="ag">
+        <div class="card">
+          <div class="card-title">Top 10 — Highest Balances</div>
+          <div class="card-sub">Carry-forward risk</div>
+          <div id="an-top10"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Overdrawn Employees</div>
+          <div class="card-sub">Taken more than entitled</div>
+          <div id="an-od"></div>
+        </div>
+      </div>
+      <div class="ag" style="margin-top:18px">
+        <div class="card">
+          <div class="card-title">Zero Leave Taken</div>
+          <div class="card-sub">HR action needed</div>
+          <div id="an-zero"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Monthly Concurrency Risk</div>
+          <div class="card-sub">Staff on leave simultaneously</div>
+          <div id="an-conc"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTAL INFO -->
+    <div class="page" id="page-portal">
+      <div class="portal-card">
+        <div class="card">
+          <div class="card-title">Employee Leave Request Portal</div>
+          <div class="card-sub">Share this link with employees to let them submit leave requests</div>
+          <div style="background:var(--light);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px">
+            <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px">Portal Link</div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);word-break:break-all" id="portal-url"></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px">Employees open this link, enter their Employee ID, and submit a request</div>
+          </div>
+          <div style="background:#FFF3E0;border:1px solid #FFB74D;border-radius:8px;padding:14px;margin-bottom:16px">
+            <div style="font-weight:600;color:var(--orange);margin-bottom:4px">⚠ Important</div>
+            <div style="font-size:13px;color:var(--text)">The employee portal is built into this same app. Share this HTML file or the hosted link with employees. They open it and see the <strong>Request Leave</strong> view automatically if they access it directly.<br><br>To add the portal button to your hosted site, share the URL with <code style="background:var(--border);padding:2px 5px;border-radius:3px">?portal=1</code> at the end.</div>
+          </div>
+          <div style="font-weight:600;color:var(--navy);margin-bottom:10px">How it works</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+              <div><div style="font-weight:500">Employee opens the portal link</div><div style="font-size:12px;color:var(--muted)">They see the Request Leave screen — not the HR dashboard</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+              <div><div style="font-weight:500">They enter their Employee ID and see their balance</div><div style="font-size:12px;color:var(--muted)">Balance is shown before they submit</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+              <div><div style="font-weight:500">Request appears in your Leave Requests tab</div><div style="font-size:12px;color:var(--muted)">You approve or decline with one click</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0">4</div>
+              <div><div style="font-weight:500">Approving automatically updates the leave record</div><div style="font-size:12px;color:var(--muted)">Dashboard and balances refresh instantly</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- EDIT/ADD MODAL -->
+<div class="overlay" id="emp-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modal-title">Edit Employee</div>
+        <div class="modal-sub" id="modal-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('emp-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-grid" id="modal-info-grid" style="display:none">
+        <div class="info-box"><div class="info-box-label">Entitlement</div><div class="info-box-val" id="mi-ent"></div></div>
+        <div class="info-box"><div class="info-box-label">Carry Forward</div><div class="info-box-val" id="mi-carry"></div></div>
+        <div class="info-box" id="mi-bal-box"><div class="info-box-label">Balance</div><div class="info-box-val" id="mi-bal"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px">
+        <div class="fg"><label>Employee ID</label><input class="fc" id="fi-id" placeholder="e.g. SGR126"></div>
+        <div class="fg"><label>Full Name</label><input class="fc" id="fi-name" placeholder="SURNAME Firstname"></div>
+        <div class="fg"><label>Department</label>
+          <div class="fc" style="padding:0">
+            <select id="fi-dept" style="border:none;background:none;width:100%;outline:none;padding:9px 12px;font-family:inherit;font-size:14px">
+              <option value="Admin">Admin</option><option value="BAT">BAT</option>
+              <option value="FMCG">FMCG</option><option value="Finance">Finance</option>
+              <option value="LOGISTICS">LOGISTICS</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label>Position</label><input class="fc" id="fi-pos" placeholder="Job title"></div>
+        <div class="fg"><label>Entitlement (days)</label><input type="number" class="fc" id="fi-ent" step="0.5" min="0" placeholder="0"></div>
+        <div class="fg"><label>Carry Forward 2025</label><input type="number" class="fc" id="fi-carry" step="0.5" placeholder="0"></div>
+      </div>
+      <div class="sec-head"><span style="color:var(--teal)">●</span> Actual Leave Taken — by Month</div>
+      <div class="mgrid" id="modal-act"></div>
+      <div class="sec-head" style="margin-top:16px"><span style="color:var(--purple)">●</span> Planned Leave — by Month</div>
+      <div class="mgrid" id="modal-pln"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-red btn-sm" id="modal-delete-btn" onclick="deleteEmployee()" style="margin-right:auto;display:none">🗑 Delete</button>
+      <button class="btn btn-outline" onclick="closeModal('emp-modal')">Cancel</button>
+      <button class="btn btn-green" id="modal-save-btn" onclick="saveEmployee()">💾 Save Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL / REQUEST MODAL (for employees) -->
+<div class="overlay" id="portal-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Request Leave</div>
+        <div class="modal-sub">Salvo Grima Rwanda · 2026</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('portal-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg" style="margin-bottom:12px">
+        <label>Your Employee ID</label>
+        <input type="text" class="fc" id="pr-id" placeholder="e.g. SGR087" oninput="portalLookup()" autocomplete="off">
+      </div>
+      <div id="pr-emp-info" style="display:none;margin-bottom:14px">
+        <div style="background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px">
+          <div id="pr-name" style="font-weight:600;color:var(--navy)"></div>
+          <div id="pr-detail" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+          <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center">
+              <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase">Entitlement</div>
+              <div id="pr-ent" style="font-size:18px;font-family:'DM Serif Display',serif;color:var(--navy)"></div>
+            </div>
+            <div id="pr-bal-box" style="border-radius:6px;padding:8px;text-align:center">
+              <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase">Balance</div>
+              <div id="pr-bal" style="font-size:18px;font-family:'DM Serif Display',serif"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="pr-form" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="fg">
+            <label>Days Requested</label>
+            <input type="number" class="fc" id="pr-days" step="0.5" min="0.5" placeholder="e.g. 5" oninput="portalCheck()">
+          </div>
+          <div class="fg">
+            <label>Leave Type</label>
+            <div class="fc" style="padding:0">
+              <select id="pr-type" style="border:none;background:none;width:100%;outline:none;padding:9px 12px;font-family:inherit;font-size:14px">
+                <option>Annual Leave</option><option>Sick Leave</option><option>Compassionate Leave</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="fg" style="margin-bottom:12px">
+          <label>Month(s) Requested</label>
+          <input type="text" class="fc" id="pr-month" placeholder="e.g. April 2026 or April–May">
+        </div>
+        <div class="fg" style="margin-bottom:14px">
+          <label>Reason / Notes (optional)</label>
+          <textarea class="fc" id="pr-notes" rows="2" placeholder="Any additional details…" style="resize:vertical"></textarea>
+        </div>
+        <div id="pr-check-result" style="display:none;border-radius:8px;padding:10px;margin-bottom:4px;font-size:13px;text-align:center"></div>
+      </div>
+
+      <!-- Status check section -->
+      <div id="pr-status-section" style="display:none;margin-top:4px">
+        <div style="height:1px;background:var(--border);margin:16px 0"></div>
+        <div style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">Your Past Requests</div>
+        <div id="pr-status-list"></div>
+      </div>
+    </div>
+    <div class="modal-footer" id="pr-footer" style="display:none">
+      <button class="btn btn-outline" onclick="closeModal('portal-modal')">Cancel</button>
+      <button class="btn btn-green" onclick="submitRequest()">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const SEED_EMP = [{"id": "SGR001", "name": "NSENGAYIRE Ntivunwa Donat", "dept": "Admin", "position": "General Manager", "entitled": 16.0, "carry": -3.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR004", "name": "NDUGGA Jafari", "dept": "FMCG", "position": "Sales Manager", "entitled": 23.0, "carry": 23.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR005", "name": "MURENZI Adalbert", "dept": "BAT", "position": "Sales Representative", "entitled": 38.0, "carry": 19.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 24.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 8.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR006", "name": "GASASIRA Jean", "dept": "BAT", "position": "Sales Representative", "entitled": 32.0, "carry": 13.0, "actual": {"Jan": 0.0, "Feb": 2.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 11.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 21.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR009", "name": "NIYIBIZI Jacques", "dept": "BAT", "position": "Sales Representative", "entitled": 26.0, "carry": 7.0, "actual": {"Jan": 0.0, "Feb": 2.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 22.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR010", "name": "NIYIGENA Esther", "dept": "Admin", "position": "Finance&Administration Officer", "entitled": 28.0, "carry": 9.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 8.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 6.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 7.0}}, {"id": "SGR011", "name": "IRANZI Jacques Albert", "dept": "BAT", "position": "Sales Representative", "entitled": 15.0, "carry": -4.0, "actual": {"Jan": 0.0, "Feb": 1.0, "Mar": 8.0, "Apr": 11.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 14.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 5.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR012", "name": "MUTEMBASHESHE Marie Christine", "dept": "FMCG", "position": "FMCG Sales representative", "entitled": 34.0, "carry": 15.0, "actual": {"Jan": 0.0, "Feb": 14.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR013", "name": "GASIBIREGE Eline Michele", "dept": "FMCG", "position": "Key Account & Sales Supervisor", "entitled": 19.0, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 1.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR014", "name": "AMBAZA Jackie", "dept": "FMCG", "position": "FMCG Sales representative", "entitled": 22.0, "carry": 3.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR016", "name": "MUTUYIMANA Theodore", "dept": "FMCG", "position": "FMCG Depot supervisor", "entitled": 14.0, "carry": -5.0, "actual": {"Jan": 0.0, "Feb": 2.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 12.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 5.0}}, {"id": "SGR017", "name": "NIYIBIZI Emmanuel", "dept": "BAT", "position": "Sales Representative", "entitled": 28.0, "carry": 9.0, "actual": {"Jan": 0.0, "Feb": 1.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 25.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 3.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR018", "name": "HABARUGIRA Idrissa", "dept": "FMCG", "position": "Sales Representative", "entitled": 26.0, "carry": 7.0, "actual": {"Jan": 12.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR020", "name": "BIRASA Raissa Inyange", "dept": "BAT", "position": "Operation Manager", "entitled": 28.0, "carry": 9.0, "actual": {"Jan": 9.0, "Feb": 0.0, "Mar": 1.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 9.0, "Feb": 0.0, "Mar": 0.0, "Apr": 7.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 8.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 5.0}}, {"id": "SGR021", "name": "HAKIZIMANA Godefroid", "dept": "BAT", "position": "Sales Representative", "entitled": 27.0, "carry": 8.0, "actual": {"Jan": 3.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 7.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 16.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR022", "name": "BAZATSINDA Anitha", "dept": "FMCG", "position": "Sales Representative", "entitled": 18.0, "carry": -1.0, "actual": {"Jan": 0.0, "Feb": 4.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR023", "name": "BUTERA Etienne", "dept": "FMCG", "position": "Sales Representative", "entitled": 22.0, "carry": 3.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR024", "name": "ISHIMWE Jean Aime", "dept": "FMCG", "position": "Sales Representative", "entitled": 48.0, "carry": 29.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR025", "name": "KAREMERA Benon", "dept": "FMCG", "position": "Sales Representative", "entitled": 43.0, "carry": 24.0, "actual": {"Jan": 0.0, "Feb": 16.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR027", "name": "MUTIGANDA Aloys", "dept": "FMCG", "position": "Sales Representative", "entitled": 35.0, "carry": 16.0, "actual": {"Jan": 0.0, "Feb": 8.0, "Mar": 8.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR028", "name": "NIYONSENGA Theophile", "dept": "FMCG", "position": "Sales Representative", "entitled": 45.0, "carry": 26.0, "actual": {"Jan": 13.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR030", "name": "NTAMBARA James", "dept": "FMCG", "position": "Sales Representative", "entitled": 49.0, "carry": 30.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 6.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR031", "name": "NTWARI Fred", "dept": "FMCG", "position": "Sales Representative", "entitled": 70.0, "carry": 51.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 18.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR032", "name": "SEMANA Seleman", "dept": "BAT", "position": "Sales Representative Supervisor", "entitled": 22.0, "carry": 3.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 10.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR034", "name": "MUKAKARISA Francoise", "dept": "FMCG", "position": "Kigali warehouse manager", "entitled": 55.0, "carry": 36.0, "actual": {"Jan": 2.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 2.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 10.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 12.0, "Dec": 0.0}}, {"id": "SGR035", "name": "UWAMWEZI Alphonsine", "dept": "FMCG", "position": "Depot Manager", "entitled": 35.0, "carry": 16.0, "actual": {"Jan": 0.0, "Feb": 3.0, "Mar": 17.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 24.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR036", "name": "MWANANGU Richard Patrick", "dept": "FMCG", "position": "Operations manager", "entitled": 18.0, "carry": -1.0, "actual": {"Jan": 0.0, "Feb": 3.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 7.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 6.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 6.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR037", "name": "MUNYENGOGA Jonas", "dept": "FMCG", "position": "Sales Representative", "entitled": 56.0, "carry": 37.0, "actual": {"Jan": 12.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR038", "name": "HAGENIMANA John", "dept": "FMCG", "position": "Sales Representative Supervisor", "entitled": 59.0, "carry": 40.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR039", "name": "MUKAMWIZA Alice", "dept": "FMCG", "position": "Depot Manager", "entitled": 36.0, "carry": 17.0, "actual": {"Jan": 8.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 8.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 24.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR040", "name": "ABIJURU Nadine", "dept": "Admin", "position": "Depot Manager", "entitled": 51.0, "carry": 32.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 24.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR043", "name": "UMUKUNZI Pascaline", "dept": "Admin", "position": "Depot Manager", "entitled": 37.0, "carry": 18.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 17.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 18.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR044", "name": "NALISISY Joseph Nice", "dept": "FMCG", "position": "Sales Representative", "entitled": 18.0, "carry": -1.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR045", "name": "KAGAME Alexis", "dept": "FMCG", "position": "Sales Representative", "entitled": 19.0, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 2.0, "Mar": 3.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR046", "name": "RUHARARAMANZI Merci", "dept": "FMCG", "position": "Delivery Driver", "entitled": 47.0, "carry": 28.0, "actual": {"Jan": 0.0, "Feb": 1.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 11.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 3.0, "Oct": 9.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR048", "name": "MUGABO Remi Sylvestre", "dept": "FMCG", "position": "Sales Representative", "entitled": 45.0, "carry": 26.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR049", "name": "UMUGWANEZA Fanny", "dept": "FMCG", "position": "Warehouse supervisor", "entitled": 34.0, "carry": 15.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 2.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR050", "name": "HABIMANA Prosper", "dept": "FMCG", "position": "Finance clerk", "entitled": 47.0, "carry": 28.0, "actual": {"Jan": 3.0, "Feb": 0.0, "Mar": 6.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 3.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 13.0, "Jul": 0.0, "Aug": 0.0, "Sep": 12.0, "Oct": 0.0, "Nov": 7.0, "Dec": 0.0}}, {"id": "SGR051", "name": "KAMUNTU Alex", "dept": "FMCG", "position": "Warehouse supervisor", "entitled": 41.0, "carry": 22.0, "actual": {"Jan": 0.0, "Feb": 30.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 24.0, "Mar": 7.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR052", "name": "NDAYAMABAJE Gaston", "dept": "FMCG", "position": "Sales Represantative", "entitled": 43.0, "carry": 24.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 8.0, "Apr": 4.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR053", "name": "MURWANASHYAKA  Paul", "dept": "BAT", "position": "Payable Accountant Officer", "entitled": 33.0, "carry": 14.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 11.0, "Mar": 1.0, "Apr": 0.0, "May": 6.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 12.0, "Oct": 0.0, "Nov": 5.0, "Dec": 0.0}}, {"id": "SGR055", "name": "KARINGANIRE Jean D'Amour", "dept": "Admin", "position": "IT Support and Data analyst", "entitled": 31.0, "carry": 12.0, "actual": {"Jan": 1.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 6.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 1.0, "Sep": 11.0, "Oct": 0.0, "Nov": 0.0, "Dec": 13.0}}, {"id": "SGR056", "name": "MUHIRE Joseph", "dept": "FMCG", "position": "Driver", "entitled": 30.0, "carry": 11.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 12.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 9.0}}, {"id": "SGR057", "name": "UWIRAGIYE  Emmanuel", "dept": "FMCG", "position": "Driver", "entitled": 66.0, "carry": 47.0, "actual": {"Jan": 12.0, "Feb": 4.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 12.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 18.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 12.0, "Nov": 6.0, "Dec": 0.0}}, {"id": "SGR058", "name": "NSENGIYUMVA Philbert", "dept": "Finance", "position": "Finance Clerk", "entitled": 47.0, "carry": 28.0, "actual": {"Jan": 1.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 14.0, "Mar": 0.0, "Apr": 0.0, "May": 14.0, "Jun": 0.0, "Jul": 0.0, "Aug": 14.0, "Sep": 0.0, "Oct": 0.0, "Nov": 12.0, "Dec": 0.0}}, {"id": "SGR059", "name": "RUBAGUMYA Albert", "dept": "FMCG", "position": "Driver", "entitled": 40.0, "carry": 21.0, "actual": {"Jan": 6.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 6.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 8.0, "Jul": 4.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 12.0, "Dec": 0.0}}, {"id": "SGR060", "name": "NSHUTI Enee Moise", "dept": "FMCG", "position": "Driver", "entitled": 53.0, "carry": 34.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 12.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 10.0}}, {"id": "SGR061", "name": "UWIZEYE Jean Baptitse", "dept": "FMCG", "position": "Delivery Driver", "entitled": 31.5, "carry": 26.0, "actual": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 12.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 7.0, "Dec": 5.0}}, {"id": "SGR062", "name": "HAGENIMANA Isaac", "dept": "BAT", "position": "Depot Manager", "entitled": 33.5, "carry": 14.5, "actual": {"Jan": 0.0, "Feb": 1.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 26.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR063", "name": "IRANKUNDA Fauste", "dept": "FMCG", "position": "Depot Manager", "entitled": 71.5, "carry": 52.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 27.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 17.0}}, {"id": "SGR064", "name": "UWAMAHORO Vestine", "dept": "Admin", "position": "Depot Manager", "entitled": 32.5, "carry": 13.5, "actual": {"Jan": 10.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 16.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 24.0, "Dec": 0.0}}, {"id": "SGR065", "name": "HABIRYAYO Innocent", "dept": "FMCG", "position": "Depot Manager", "entitled": 71.5, "carry": 52.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 25.0, "Jul": 0.0, "Aug": 0.0, "Sep": 11.0, "Oct": 0.0, "Nov": 0.0, "Dec": 17.0}}, {"id": "SGR066", "name": "UWIRAGIYE Jean marie Gustave", "dept": "BAT", "position": "Sales Representative", "entitled": 63.5, "carry": 44.5, "actual": {"Jan": 2.0, "Feb": 9.0, "Mar": 7.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 2.0, "Feb": 4.0, "Mar": 5.0, "Apr": 3.0, "May": 4.0, "Jun": 5.0, "Jul": 4.0, "Aug": 4.0, "Sep": 5.0, "Oct": 4.0, "Nov": 4.0, "Dec": 5.0}}, {"id": "SGR067", "name": "MUNYANEZA Emmanuel", "dept": "FMCG", "position": "Sales Representative", "entitled": 31.5, "carry": 12.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR068", "name": "KAREMERA Steven", "dept": "FMCG", "position": "Sales Representative", "entitled": 48.5, "carry": 29.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR069", "name": "NKURUNZIZA Emmanuel", "dept": "FMCG", "position": "Sales Representative", "entitled": 29.5, "carry": 10.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR071", "name": "KWIZERA Victor", "dept": "FMCG", "position": "Route to Market Manager", "entitled": 35.0, "carry": 16.0, "actual": {"Jan": 0.0, "Feb": 6.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR073", "name": "KAYITESI Nelly", "dept": "FMCG", "position": "FMCG Sales representative", "entitled": 34.5, "carry": 15.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR074", "name": "GASHAYIJA Steven", "dept": "FMCG", "position": "Order Booker", "entitled": 50.5, "carry": 31.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR076", "name": "KAGERUKA Patrick", "dept": "FMCG", "position": "Trade marketing Executive", "entitled": 40.0, "carry": 21.0, "actual": {"Jan": 3.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 8.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 11.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR077", "name": "KOMEZUSENGE Sylvain", "dept": "FMCG", "position": "Sales Representative", "entitled": 22.0, "carry": 3.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR078", "name": "MUJAWAJAMBO Diane", "dept": "FMCG", "position": "Sales Representative", "entitled": 36.0, "carry": 17.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR079", "name": "RWITIRINYA Samuel", "dept": "FMCG", "position": "Sales Representative", "entitled": 38.0, "carry": 19.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR080", "name": "TWAMBAZIMANA Deo", "dept": "FMCG", "position": "Sales Representative", "entitled": 48.0, "carry": 29.0, "actual": {"Jan": 1.0, "Feb": 1.0, "Mar": 5.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR081", "name": "NYIRANEZA Solange", "dept": "FMCG", "position": "Logistics Executive", "entitled": 32.5, "carry": 13.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 10.0, "May": 0.0, "Jun": 0.0, "Jul": 15.0, "Aug": 2.0, "Sep": 0.0, "Oct": 0.0, "Nov": 7.0, "Dec": 0.0}}, {"id": "SGR082", "name": "NKWAYA Mugabe Jules", "dept": "FMCG", "position": "Delivery Driver", "entitled": 28.0, "carry": 9.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 10.0, "May": 2.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 12.0, "Oct": 0.0, "Nov": 0.0, "Dec": 4.0}}, {"id": "SGR083", "name": "BIGIRUMWAMI Byakweli", "dept": "FMCG", "position": "Delivery Driver", "entitled": 26.0, "carry": 7.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 2.0, "Apr": 9.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 1.0, "Sep": 11.0, "Oct": 0.0, "Nov": 0.0, "Dec": 2.0}}, {"id": "SGR084", "name": "NDAYISHIMIYE Ernest", "dept": "FMCG", "position": "Delivery Driver", "entitled": 46.0, "carry": 27.0, "actual": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 11.0, "Aug": 1.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR085", "name": "NZABARUSHIMANA Jean Baptiste", "dept": "FMCG", "position": "Delivery Driver", "entitled": 44.0, "carry": 25.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 8.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 12.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR086", "name": "SANKARA Jules", "dept": "FMCG", "position": "Sales Representative", "entitled": 25.0, "carry": 6.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR087", "name": "GAHAMANYI Albert", "dept": "Admin", "position": "Human Resource Executive", "entitled": 22.5, "carry": 3.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR088", "name": "MUGENZI Innocent", "dept": "FMCG", "position": "Depot Manager", "entitled": 37.5, "carry": 18.5, "actual": {"Jan": 0.0, "Feb": 4.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 6.0, "Apr": 4.0, "May": 2.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 10.0}}, {"id": "SGR089", "name": "NSENGIYAREMYE Eric", "dept": "BAT", "position": "Sales Representative", "entitled": 27.0, "carry": 8.0, "actual": {"Jan": 0.0, "Feb": 1.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 27.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR091", "name": "MUKAMANA Beatrice", "dept": "FMCG", "position": "Depot Manager", "entitled": 33.8, "carry": 15.8, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 14.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 14.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR093", "name": "NKURIKIYIMANA Louis", "dept": "FMCG", "position": "Healthcare & Nutrition Repres.", "entitled": 18.0, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR095", "name": "MUHORAKEYE Liliose", "dept": "FMCG", "position": "Merchandiser", "entitled": 23.5, "carry": 5.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 5.0, "Jun": 0.0, "Jul": 6.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 6.0}}, {"id": "SGR096", "name": "AHISHAKIYE Francois Dassise", "dept": "FMCG", "position": "Merchandiser", "entitled": 37.5, "carry": 19.5, "actual": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 12.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 12.0, "Oct": 0.0, "Nov": 0.0, "Dec": 11.0}}, {"id": "SGR100", "name": "ABIJURU Nicolas", "dept": "FMCG", "position": "Sales Manager", "entitled": 30.0, "carry": 12.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR101", "name": "SESONGA Alexis", "dept": "FMCG", "position": "Sales Representative", "entitled": 28.0, "carry": 10.0, "actual": {"Jan": 12.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR102", "name": "NYINAWUMUNTU Emerthe", "dept": "FMCG", "position": "Sales Representative", "entitled": 37.0, "carry": 19.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR104", "name": "UMURISA Phionah", "dept": "FMCG", "position": "Sales Representative", "entitled": 23.0, "carry": 17.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 6.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR105", "name": "UWAYISENGA Jean Paul", "dept": "FMCG", "position": "Sales Representative", "entitled": 32.0, "carry": 14.0, "actual": {"Jan": 6.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR106", "name": "NDAHIMANA Super", "dept": "Admin", "position": "Data Analyst", "entitled": 31.5, "carry": 13.5, "actual": {"Jan": 0.0, "Feb": 9.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 6.0, "Mar": 0.0, "Apr": 0.0, "May": 6.0, "Jun": 2.0, "Jul": 10.0, "Aug": 0.0, "Sep": 3.0, "Oct": 3.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR108", "name": "TWAGIRAMARIYA Sandrine", "dept": "BAT", "position": "Marketing Service Executive", "entitled": 28.5, "carry": 10.5, "actual": {"Jan": 0.0, "Feb": 2.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR109", "name": "MUPENZI Emmanuel", "dept": "FMCG", "position": "Sales Representative", "entitled": 27.8, "carry": 9.8, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 12.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR110", "name": "GIHOZO Alice Marie Sandrine", "dept": "FMCG", "position": "Sales Representative", "entitled": 39.8, "carry": 21.8, "actual": {"Jan": 0.0, "Feb": 12.0, "Mar": 1.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR111", "name": "NGABONZIZA Egide", "dept": "Finance", "position": "Senior Accountant", "entitled": 37.5, "carry": 19.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 3.0, "Aug": 0.0, "Sep": 0.0, "Oct": 6.0, "Nov": 11.0, "Dec": 0.0}}, {"id": "SGR112", "name": "KIRONDE Dominique", "dept": "Finance", "position": "Accountant", "entitled": 33.5, "carry": 15.5, "actual": {"Jan": 2.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 1.0, "Feb": 0.0, "Mar": 0.0, "Apr": 2.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 12.0, "Sep": 0.0, "Oct": 4.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR113", "name": "TWITEGURE Marie Grace", "dept": "Admin", "position": "Admin & HR Assistant", "entitled": 25.0, "carry": 7.0, "actual": {"Jan": 0.0, "Feb": 6.0, "Mar": 1.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR114", "name": "MUGARURA Mark", "dept": "FMCG", "position": "Marketing Manager", "entitled": 22.0, "carry": 4.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR115", "name": "UWIMANA Jacques", "dept": "FMCG", "position": "Fleet & Security Officer", "entitled": 27.0, "carry": 9.0, "actual": {"Jan": 0.0, "Feb": 6.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 6.0, "Mar": 0.0, "Apr": 0.0, "May": 6.0, "Jun": 0.0, "Jul": 0.0, "Aug": 6.0, "Sep": 0.0, "Oct": 0.0, "Nov": 6.0, "Dec": 3.0}}, {"id": "SGR117", "name": "MUNEZERO Saidi", "dept": "FMCG", "position": "Sales Representative", "entitled": 24.0, "carry": 6.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR119", "name": "BOYI Boniface", "dept": "Finance", "position": "Finance Clerk", "entitled": 20.0, "carry": 2.0, "actual": {"Jan": 0.0, "Feb": 4.5, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0.0, "Feb": 8.0, "Mar": 0.0, "Apr": 0.0, "May": 8.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}}, {"id": "SGR120", "name": "SEBUHORO Jovan", "dept": "FMCG", "position": "Commercial Manager", "entitled": 22.5, "carry": 4.5, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR121", "name": "NKIKO Ishime Aimable", "dept": "FMCG", "position": "Sales Representative", "entitled": 16.5, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR122", "name": "TUYISHIME Felicien", "dept": "FMCG", "position": "Sales Representative", "entitled": 16.5, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR123", "name": "MUGABEKAZI Bonny", "dept": "FMCG", "position": "Merchandiser", "entitled": 4.5, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR124", "name": "ISHEMA Kalisa Ccedric", "dept": "FMCG", "position": "Sales Supervisor", "entitled": 7.5, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}, {"id": "SGR125", "name": "IKIREZI Agathe", "dept": "LOGISTICS", "position": "Logistics Assistant", "entitled": 7.5, "carry": 0.0, "actual": {"Jan": 0.0, "Feb": 0.0, "Mar": 0.0, "Apr": 0.0, "May": 0.0, "Jun": 0.0, "Jul": 0.0, "Aug": 0.0, "Sep": 0.0, "Oct": 0.0, "Nov": 0.0, "Dec": 0.0}, "planned": {"Jan": 0, "Feb": 0, "Mar": 0, "Apr": 0, "May": 0, "Jun": 0, "Jul": 0, "Aug": 0, "Sep": 0, "Oct": 0, "Nov": 0, "Dec": 0}}];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DEPTS  = ["Admin","BAT","FMCG","Finance","LOGISTICS"];
+const SK_EMP = "sgr_emp_2026";
+const SK_REQ = "sgr_req_2026";
+
+function loadEmp(){ try{ const s=localStorage.getItem(SK_EMP); return s?JSON.parse(s):JSON.parse(JSON.stringify(SEED_EMP)); }catch(e){ return JSON.parse(JSON.stringify(SEED_EMP)); } }
+function loadReq(){ try{ const s=localStorage.getItem(SK_REQ); return s?JSON.parse(s):[]; }catch(e){ return []; } }
+function saveEmp(){ localStorage.setItem(SK_EMP,JSON.stringify(employees)); }
+function saveReq(){ localStorage.setItem(SK_REQ,JSON.stringify(requests)); }
+
+let employees = loadEmp();
+let requests  = loadReq();
+let currentEmpId = null;
+let isAddMode    = false;
+let deptFilter   = "All";
+let sortCol      = "name", sortDir = 1;
+let reqFilter    = "all";
+let chkEmp       = null;
+let portalEmp    = null;
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+const taken   = e => MONTHS.reduce((s,m)=>s+(e.actual[m]||0),0);
+const planned = e => MONTHS.reduce((s,m)=>s+(e.planned[m]||0),0);
+const balance = e => (e.entitled||0)+(e.carry||0)-taken(e);
+const avatarColor = n => { const colors=["#1E3A5F","#1F7A8C","#7030A0","#1A7A3C","#E26B0A"]; let h=0; for(let c of n) h=(h<<5)-h+c.charCodeAt(0); return colors[Math.abs(h)%colors.length]; };
+const initials = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const PAGE_TITLES = {dashboard:"Dashboard",employees:"Employees",requests:"Leave Requests",checker:"Leave Checker",analytics:"HR Analytics",portal:"Employee Portal"};
+function nav(el){
+  const page = el.dataset.page;
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  el.classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  document.getElementById("page-title").textContent = PAGE_TITLES[page]||page;
+  const isEmp = page==="employees";
+  document.getElementById("topbar-search").style.display = isEmp?"flex":"none";
+  document.getElementById("add-emp-btn").style.display   = isEmp?"flex":"none";
+  if(page==="dashboard")  renderDashboard();
+  if(page==="employees")  renderEmpTable();
+  if(page==="requests")   renderRequests();
+  if(page==="analytics")  renderAnalytics();
+  if(page==="portal")     renderPortal();
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDashboard(){
+  const tot = employees.length;
+  const totEnt  = employees.reduce((s,e)=>s+e.entitled,0);
+  const totTkn  = employees.reduce((s,e)=>s+taken(e),0);
+  const totBal  = employees.reduce((s,e)=>s+balance(e),0);
+  const totPln  = employees.reduce((s,e)=>s+planned(e),0);
+  const util    = totPln>0?(totTkn/totPln*100).toFixed(1):0;
+  const od      = employees.filter(e=>balance(e)<0).length;
+  const pending = requests.filter(r=>r.status==="pending").length;
+
+  document.getElementById("kpis").innerHTML=[
+    {l:"Total Staff",v:tot,s:"employees",c:"c-navy"},
+    {l:"Total Entitlement",v:totEnt.toFixed(0),s:"working days",c:"c-teal"},
+    {l:"AL Taken YTD",v:totTkn.toFixed(0),s:"days taken",c:"c-green"},
+    {l:"Total Balance",v:totBal.toFixed(0),s:"days remaining",c:"c-gold"},
+    {l:"Utilisation",v:util+"%",s:"of plan taken",c:"c-orange"},
+    {l:"Overdrawn",v:od,s:"employees",c:"c-red"},
+  ].map(k=>`<div class="kpi ${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join("");
+
+  const maxD = Math.max(1,...MONTHS.map(m=>employees.reduce((s,e)=>s+(e.actual[m]||0),0)));
+  document.getElementById("monthly-chart").innerHTML = MONTHS.map(m=>{
+    const a=employees.reduce((s,e)=>s+(e.actual[m]||0),0);
+    const p=employees.reduce((s,e)=>s+(e.planned[m]||0),0);
+    return `<div class="mbar-row"><div class="mbar-lbl">${m}</div><div class="mbar-track"><div class="mbar-act" style="width:${(a/maxD*100).toFixed(1)}%"></div><div class="mbar-pln" style="width:${Math.max(0,(p-a)/maxD*100).toFixed(1)}%"></div></div><div class="mbar-val">${a.toFixed(0)}</div></div>`;
+  }).join("");
+
+  document.getElementById("dept-overview").innerHTML = DEPTS.map(d=>{
+    const emps=employees.filter(e=>e.dept===d); if(!emps.length) return "";
+    const t=emps.reduce((s,e)=>s+taken(e),0), b=emps.reduce((s,e)=>s+balance(e),0), o=emps.filter(e=>balance(e)<0).length;
+    return `<div class="sum-row"><div><span class="badge b-${d}">${d}</span><span style="font-size:12px;color:var(--muted);margin-left:6px">${emps.length} staff</span></div><div style="display:flex;gap:10px;font-size:12px"><span style="color:var(--teal)">Tkn ${t.toFixed(0)}</span><span style="color:${b<0?"var(--red)":"var(--green)"}">Bal ${b.toFixed(0)}</span>${o?`<span class="tag tag-red">${o} OD</span>`:""}</div></div>`;
+  }).join("");
+
+  const alerts=[];
+  const ods=employees.filter(e=>balance(e)<0);
+  if(ods.length) alerts.push({t:"red",m:`${ods.length} overdrawn: `+ods.slice(0,3).map(e=>e.name.split(" ").pop()).join(", ")+(ods.length>3?"…":"")});
+  if(pending)    alerts.push({t:"orange",m:`${pending} leave request${pending>1?"s":""} pending your approval`});
+  const hi=employees.filter(e=>balance(e)>30);
+  if(hi.length)  alerts.push({t:"gold",m:`${hi.length} employees have >30 days balance — carry-forward risk`});
+  const noTkn=employees.filter(e=>taken(e)===0);
+  if(noTkn.length) alerts.push({t:"muted",m:`${noTkn.length} employees have taken no leave yet in 2026`});
+  document.getElementById("alerts").innerHTML=alerts.length?alerts.map(a=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+      <span class="tag tag-${a.t}" style="white-space:nowrap;flex-shrink:0">${a.t==="red"?"⚠ OVERDRAWN":a.t==="orange"?"📋 REQUESTS":a.t==="gold"?"HIGH BAL":"INFO"}</span>
+      <span style="font-size:13px">${a.m}</span>
+    </div>`).join(""):`<div style="color:var(--muted);font-size:13px;padding:10px 0">✅ No active alerts</div>`;
+
+  updateBadge();
+}
+
+function updateBadge(){
+  const n=requests.filter(r=>r.status==="pending").length;
+  document.getElementById("req-badge").textContent=n||"";
+  document.getElementById("req-badge").style.display=n?"":"none";
+}
+
+// ═══════════════════════════════════════════════════════
+// EMPLOYEES TABLE
+// ═══════════════════════════════════════════════════════
+function renderDeptChips(){
+  document.getElementById("dept-chips").innerHTML=["All",...DEPTS].map(d=>`<div class="chip ${deptFilter===d?"active":""}" onclick="setDept('${d}')">${d}${d!=="All"?" ("+employees.filter(e=>e.dept===d).length+")":""}</div>`).join("");
+}
+function setDept(d){ deptFilter=d; renderEmpTable(); }
+
+function renderEmpTable(){
+  renderDeptChips();
+  const q=(document.getElementById("emp-search-top")||{value:""}).value.toLowerCase();
+  let list=employees.filter(e=>{
+    const md=deptFilter==="All"||e.dept===deptFilter;
+    const ms=!q||e.name.toLowerCase().includes(q)||e.id.toLowerCase().includes(q)||e.position.toLowerCase().includes(q);
+    return md&&ms;
+  });
+  list.sort((a,b)=>{
+    let va=sortCol==="taken"?taken(a):sortCol==="balance"?balance(a):(a[sortCol]||"");
+    let vb=sortCol==="taken"?taken(b):sortCol==="balance"?balance(b):(b[sortCol]||"");
+    return typeof va==="string"?va.localeCompare(vb)*sortDir:(va-vb)*sortDir;
+  });
+  document.getElementById("emp-count").textContent=`${list.length} employee${list.length!==1?"s":""}`;
+  document.getElementById("emp-tbody").innerHTML=list.map(e=>{
+    const tkn=taken(e), bal=balance(e);
+    const tot=e.entitled+e.carry, pct=tot>0?Math.min(100,tkn/tot*100):0;
+    const bc=bal<0?"var(--red)":bal<=5?"var(--orange)":"var(--teal)";
+    const vc=bal<0?"neg":bal===0?"zero":bal<=5?"low":"pos";
+    const dots=MONTHS.map(m=>{const a=(e.actual[m]||0)>0,p=(e.planned[m]||0)>0;return`<div class="mdot ${a&&p?"both":a?"act":p?"pln":""}" title="${m}: Act ${e.actual[m]||0} / Plan ${e.planned[m]||0}"></div>`;}).join("");
+    return `<tr onclick="openEmpModal('${e.id}')">
+      <td><span style="font-size:11px;font-weight:700;color:var(--muted)">${e.id}</span></td>
+      <td><div class="emp-name">${e.name}</div><div class="emp-pos">${e.position}</div></td>
+      <td><span class="badge b-${e.dept}">${e.dept}</span></td>
+      <td style="text-align:center">${e.entitled.toFixed(1)}</td>
+      <td style="text-align:center;font-weight:600">${tkn.toFixed(1)}</td>
+      <td><div class="bal-wrap"><div class="bal-bar"><div class="bal-fill" style="width:${pct.toFixed(0)}%;background:${bc}"></div></div><div class="bal-val ${vc}">${bal.toFixed(1)}</div></div></td>
+      <td><div class="mdots">${dots}</div></td>
+      <td><button class="btn btn-sm btn-primary" onclick="event.stopPropagation();openEmpModal('${e.id}')">Edit</button></td>
+    </tr>`;
+  }).join()||`<tr><td colspan="8"><div class="empty"><div class="empty-icon">🔍</div><div>No employees found</div></div></td></tr>`;
+}
+function sort(col){ sortDir=sortCol===col?-sortDir:1; sortCol=col; renderEmpTable(); }
+
+// ═══════════════════════════════════════════════════════
+// EMPLOYEE MODAL (edit + add)
+// ═══════════════════════════════════════════════════════
+function buildMonthInputs(containerId, data, cls){
+  document.getElementById(containerId).innerHTML=MONTHS.map(m=>`
+    <div class="mi-wrap">
+      <div class="mi-lbl">${m}</div>
+      <input type="number" class="mi ${cls}" id="${cls}-${m}" value="${(data&&data[m])||""}" min="0" step="0.5" placeholder="0">
+    </div>`).join("");
+}
+
+function openEmpModal(id){
+  isAddMode=false; currentEmpId=id;
+  const e=employees.find(x=>x.id===id); if(!e) return;
+  document.getElementById("modal-title").textContent="Edit Leave Record";
+  document.getElementById("modal-sub").textContent=`${e.id} · ${e.dept} · ${e.position}`;
+  document.getElementById("modal-info-grid").style.display="grid";
+  document.getElementById("mi-ent").textContent=e.entitled.toFixed(1)+" days";
+  document.getElementById("mi-carry").textContent=e.carry.toFixed(1)+" days";
+  const bal=balance(e);
+  document.getElementById("mi-bal").textContent=bal.toFixed(1)+" days";
+  document.getElementById("mi-bal-box").style.background=bal<0?"#FFEBEE":bal<=5?"#FFF3E0":"#E8F5E9";
+  document.getElementById("fi-id").value=e.id; document.getElementById("fi-id").readOnly=true;
+  document.getElementById("fi-name").value=e.name;
+  document.getElementById("fi-dept").value=e.dept;
+  document.getElementById("fi-pos").value=e.position;
+  document.getElementById("fi-ent").value=e.entitled;
+  document.getElementById("fi-carry").value=e.carry;
+  buildMonthInputs("modal-act",e.actual,"act");
+  buildMonthInputs("modal-pln",e.planned,"pln");
+  document.getElementById("modal-delete-btn").style.display="flex";
+  document.getElementById("modal-save-btn").textContent="💾 Save Record";
+  openModal("emp-modal");
+}
+
+function openAddModal(){
+  isAddMode=true; currentEmpId=null;
+  document.getElementById("modal-title").textContent="Add New Employee";
+  document.getElementById("modal-sub").textContent="Enter employee details below";
+  document.getElementById("modal-info-grid").style.display="none";
+  ["fi-id","fi-name","fi-pos"].forEach(id=>{ document.getElementById(id).value=""; });
+  document.getElementById("fi-id").readOnly=false;
+  document.getElementById("fi-dept").value="FMCG";
+  document.getElementById("fi-ent").value="";
+  document.getElementById("fi-carry").value="0";
+  const empty={};MONTHS.forEach(m=>empty[m]=0);
+  buildMonthInputs("modal-act",empty,"act");
+  buildMonthInputs("modal-pln",empty,"pln");
+  document.getElementById("modal-delete-btn").style.display="none";
+  document.getElementById("modal-save-btn").textContent="➕ Add Employee";
+  openModal("emp-modal");
+}
+
+function saveEmployee(){
+  const id    = document.getElementById("fi-id").value.trim().toUpperCase();
+  const name  = document.getElementById("fi-name").value.trim();
+  const dept  = document.getElementById("fi-dept").value;
+  const pos   = document.getElementById("fi-pos").value.trim();
+  const ent   = parseFloat(document.getElementById("fi-ent").value)||0;
+  const carry = parseFloat(document.getElementById("fi-carry").value)||0;
+  if(!id||!name){ toast("ID and Name are required","error"); return; }
+  if(isAddMode && employees.find(e=>e.id===id)){ toast("Employee ID already exists","error"); return; }
+  const actual={}, pln={};
+  MONTHS.forEach(m=>{
+    const av=document.getElementById("act-"+m).value;
+    const pv=document.getElementById("pln-"+m).value;
+    actual[m]=av!==""?parseFloat(av)||0:0;
+    pln[m]   =pv!==""?parseFloat(pv)||0:0;
+  });
+  if(isAddMode){
+    employees.push({id,name,dept,position:pos,entitled:ent,carry,actual,planned:pln});
+    toast("Employee "+name.split(" ").pop()+" added!","success");
+  } else {
+    const e=employees.find(x=>x.id===currentEmpId);
+    Object.assign(e,{name,dept,position:pos,entitled:ent,carry,actual,planned:pln});
+    toast("Record saved for "+name.split(" ").pop()+"!","success");
+  }
+  saveEmp(); closeModal("emp-modal"); renderEmpTable();
+  if(document.getElementById("page-dashboard").classList.contains("active")) renderDashboard();
+}
+
+function deleteEmployee(){
+  const e=employees.find(x=>x.id===currentEmpId); if(!e) return;
+  if(!confirm(`Delete ${e.name}? This cannot be undone.`)) return;
+  employees=employees.filter(x=>x.id!==currentEmpId);
+  saveEmp(); closeModal("emp-modal"); renderEmpTable();
+  toast(e.name.split(" ").pop()+" removed","");
+}
+
+// ═══════════════════════════════════════════════════════
+// LEAVE REQUESTS
+// ═══════════════════════════════════════════════════════
+function renderRequests(){
+  let list = reqFilter==="all" ? requests : requests.filter(r=>r.status===reqFilter);
+  list = [...list].reverse(); // newest first
+  document.getElementById("req-list").innerHTML = list.length ? list.map(r=>{
+    const e=employees.find(x=>x.id===r.empId)||{name:r.empId,dept:""};
+    const bal=balance(e);
+    const canApprove = bal >= r.days;
+    const sc={pending:"s-pending",approved:"s-approved",declined:"s-declined"};
+    return `<div class="req-card">
+      <div class="req-avatar" style="background:${avatarColor(e.name)}">${initials(e.name)}</div>
+      <div class="req-info">
+        <div class="req-name">${e.name} <span class="badge b-${e.dept}" style="margin-left:4px">${e.dept}</span></div>
+        <div class="req-detail">
+          <strong>${r.days} days</strong> · ${r.type} · ${r.month||""}
+          ${r.notes?`· <em style="color:var(--muted)">${r.notes}</em>`:""}
+          <span style="margin-left:8px;color:var(--muted);font-size:11px">${new Date(r.ts).toLocaleDateString()}</span>
+        </div>
+        <div style="font-size:12px;margin-top:3px">Balance: <strong style="color:${bal<0?"var(--red)":bal<=r.days?"var(--orange)":"var(--green)"}">${bal.toFixed(1)} days</strong>
+          ${!canApprove&&r.status==="pending"?`<span class="tag tag-red" style="margin-left:6px">Insufficient balance</span>`:""}
+        </div>
+      </div>
+      <div style="text-align:center;margin:0 8px">
+        <div class="req-days">${r.days}</div>
+        <div style="font-size:10px;color:var(--muted)">days</div>
+      </div>
+      ${r.status==="pending"?`
+        <div class="req-actions">
+          <button class="btn btn-green btn-sm" onclick="decideRequest('${r.id}','approved')" ${!canApprove?"title='Insufficient balance' style='opacity:.5'":""}>✅ Approve</button>
+          <button class="btn btn-red btn-sm" onclick="decideRequest('${r.id}','declined')">❌ Decline</button>
+        </div>`:`
+        <div style="text-align:center"><span class="status-badge ${sc[r.status]}">${r.status.toUpperCase()}</span></div>`}
+    </div>`;
+  }).join("") : `<div class="empty"><div class="empty-icon">📋</div><div>No ${reqFilter==="all"?"":reqFilter} requests</div></div>`;
+  updateBadge();
+}
+
+function filterReqs(f, el){
+  reqFilter=f;
+  document.querySelectorAll("#page-requests .btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  renderRequests();
+}
+
+function decideRequest(id, decision){
+  const req=requests.find(r=>r.id===id); if(!req) return;
+  const e=employees.find(x=>x.id===req.empId); if(!e) return;
+  if(decision==="approved"){
+    if(balance(e)<req.days){
+      if(!confirm(`${e.name} only has ${balance(e).toFixed(1)} days balance but requested ${req.days}. Approve anyway?`)) return;
+    }
+    // Auto-update the leave record — find the month mentioned or use current month
+    const month = req.month ? MONTHS.find(m=>req.month.toLowerCase().includes(m.toLowerCase())) : null;
+    if(month){
+      e.actual[month] = (e.actual[month]||0) + req.days;
+    }
+    saveEmp();
+  }
+  req.status=decision; req.decidedAt=Date.now();
+  saveReq(); renderRequests();
+  toast(decision==="approved"?`✅ Approved — ${e.name.split(" ").pop()}'s record updated`:`❌ Request declined`);
+  if(month && decision==="approved") toast(`${month} actual leave updated to ${e.actual[month]} days`,"success");
+
+  // Show copyable WhatsApp/email confirmation message
+  const balAfter=balance(e);
+  const msg=decision==="approved"
+    ? `Dear ${e.name},\n\nYour leave request of ${req.days} days (${req.type}${req.month?", "+req.month:""}) has been APPROVED.\n\nRemaining leave balance: ${balAfter.toFixed(1)} days.\n\nKind regards,\nAlbert Gahamanyi | HR\nSalvo Grima Rwanda`
+    : `Dear ${e.name},\n\nYour leave request of ${req.days} days (${req.type}${req.month?", "+req.month:""}) has been DECLINED.\n\nCurrent leave balance: ${balAfter.toFixed(1)} days. Please speak to HR if you have questions.\n\nKind regards,\nAlbert Gahamanyi | HR\nSalvo Grima Rwanda`;
+
+  // Show confirmation dialog with copy button
+  const box=document.createElement("div");
+  box.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px";
+  box.innerHTML=`<div style="background:#fff;border-radius:14px;padding:24px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);margin-bottom:4px">${decision==="approved"?"✅ Approved":"❌ Declined"}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Copy the message below and send to ${e.name.split(" ").pop()} via WhatsApp or email</div>
+    <textarea readonly id="conf-msg" style="width:100%;height:140px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:inherit;resize:none;background:var(--light)">${msg}</textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end">
+      <button onclick="this.closest('div[style*=fixed]').remove()" style="padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:none;cursor:pointer;font-family:inherit;font-size:13px">Close</button>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('conf-msg').value);this.textContent='✅ Copied!'" style="padding:8px 16px;border:none;border-radius:8px;background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">📋 Copy Message</button>
+    </div>
+  </div>`;
+  document.body.appendChild(box);
+}
+
+// ═══════════════════════════════════════════════════════
+// LEAVE CHECKER
+// ═══════════════════════════════════════════════════════
+function chkSearch(){
+  const q=document.getElementById("chk-inp").value.toLowerCase();
+  const dd=document.getElementById("chk-dd");
+  if(!q){dd.style.display="none";return;}
+  const m=employees.filter(e=>e.name.toLowerCase().includes(q)||e.id.toLowerCase().includes(q)).slice(0,8);
+  if(!m.length){dd.style.display="none";return;}
+  dd.style.display="block";
+  dd.innerHTML=m.map(e=>`<div class="dropdown-item" onclick="selectChk('${e.id}')"><strong>${e.name}</strong> <span style="color:var(--muted);font-size:12px">${e.id} · Bal ${balance(e).toFixed(1)}</span></div>`).join("");
+}
+function selectChk(id){
+  chkEmp=employees.find(e=>e.id===id);
+  document.getElementById("chk-dd").style.display="none";
+  document.getElementById("chk-inp").value=chkEmp.name;
+  document.getElementById("chk-sel").style.display="block";
+  document.getElementById("chk-sel-name").textContent=chkEmp.name;
+  document.getElementById("chk-sel-det").textContent=`${chkEmp.id} · ${chkEmp.dept} · Entitled: ${chkEmp.entitled} · Taken: ${taken(chkEmp).toFixed(1)} · Balance: ${balance(chkEmp).toFixed(1)}`;
+  runChecker();
+}
+function runChecker(){
+  const days=parseFloat(document.getElementById("chk-days").value)||0;
+  const r=document.getElementById("chk-result");
+  if(!chkEmp||!days){
+    r.className="chk-result chk-idle";
+    r.innerHTML=`<div class="chk-verdict" style="color:var(--muted)">—</div><div style="font-size:13px;color:var(--muted)">Select employee and enter days</div>`;
+    return;
+  }
+  const bal=balance(chkEmp), after=bal-days;
+  if(after>=0){
+    r.className="chk-result chk-approved";
+    r.innerHTML=`<div class="chk-verdict" style="color:var(--green)">✅ APPROVED</div><div style="font-size:13px">${chkEmp.name.split(" ").pop()} has <strong>${bal.toFixed(1)} days</strong>. After request: <strong>${after.toFixed(1)} days remaining</strong></div>`;
+  } else {
+    r.className="chk-result chk-declined";
+    r.innerHTML=`<div class="chk-verdict" style="color:var(--red)">❌ DECLINED</div><div style="font-size:13px">${chkEmp.name.split(" ").pop()} only has <strong>${bal.toFixed(1)} days</strong>. Short by <strong>${Math.abs(after).toFixed(1)} days</strong></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════════════
+function renderAnalytics(){
+  const top10=[...employees].sort((a,b)=>balance(b)-balance(a)).slice(0,10);
+  document.getElementById("an-top10").innerHTML=top10.map((e,i)=>`
+    <div class="sum-row"><div><span style="font-size:11px;color:var(--muted);margin-right:6px">${i+1}</span><span style="font-weight:500">${e.name}</span><br><span class="badge b-${e.dept}" style="font-size:10px">${e.dept}</span></div>
+    <span style="font-weight:700;color:var(--orange);font-size:16px">${balance(e).toFixed(1)}</span></div>`).join("");
+
+  const od=employees.filter(e=>balance(e)<0);
+  document.getElementById("an-od").innerHTML=od.length?od.map(e=>`
+    <div class="sum-row"><div><span style="font-weight:500">${e.name}</span><br><span style="font-size:11px;color:var(--muted)">${e.dept}</span></div>
+    <span class="tag tag-red">${balance(e).toFixed(1)}</span></div>`).join(""):`<div style="color:var(--green);font-size:13px;padding:10px 0">✅ No overdrawn employees</div>`;
+
+  const zero=employees.filter(e=>taken(e)===0);
+  document.getElementById("an-zero").innerHTML=zero.slice(0,15).map(e=>`
+    <div class="sum-row"><div><span style="font-weight:500;font-size:13px">${e.name}</span><br><span style="font-size:11px;color:var(--muted)">${e.dept} · Entitled ${e.entitled}</span></div>
+    <span class="tag ${planned(e)>0?"tag-orange":"tag-red"}">${planned(e)>0?"Plan set":"No plan"}</span></div>`).join("")+(zero.length>15?`<div style="font-size:12px;color:var(--muted);padding:6px 0">+${zero.length-15} more</div>`:"");
+
+  document.getElementById("an-conc").innerHTML=MONTHS.map(m=>{
+    const c=employees.filter(e=>(e.actual[m]||0)>0).length;
+    const rc=c>15?"red":c>7?"orange":"green";
+    const rl=c>15?"HIGH":c>7?"MED":"LOW";
+    return `<div class="sum-row"><span style="font-weight:600;width:28px;flex-shrink:0">${m}</span>
+      <div style="flex:1;margin:0 10px;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="width:${Math.min(100,c/employees.length*350)}%;height:100%;background:var(--${rc});border-radius:3px"></div></div>
+      <span style="font-size:12px;color:var(--muted);margin-right:8px">${c} staff</span>
+      <span class="tag tag-${rc}" style="width:32px;text-align:center">${rl}</span></div>`;
+  }).join("");
+}
+
+// ═══════════════════════════════════════════════════════
+// PORTAL
+// ═══════════════════════════════════════════════════════
+function renderPortal(){
+  document.getElementById("portal-url").textContent = window.location.href.split("?")[0]+"?portal=1";
+}
+
+function openPortalModal(){
+  document.getElementById("pr-id").value="";
+  document.getElementById("pr-emp-info").style.display="none";
+  document.getElementById("pr-form").style.display="none";
+  document.getElementById("pr-footer").style.display="none";
+  document.getElementById("pr-days").value="";
+  document.getElementById("pr-month").value="";
+  document.getElementById("pr-notes").value="";
+  document.getElementById("pr-check-result").style.display="none";
+  document.getElementById("pr-status-section").style.display="none";
+  portalEmp=null;
+  openModal("portal-modal");
+}
+
+function portalLookup(){
+  const v=document.getElementById("pr-id").value.trim().toUpperCase();
+  portalEmp=employees.find(e=>e.id===v||e.name.toUpperCase()===v);
+  const info=document.getElementById("pr-emp-info");
+  const form=document.getElementById("pr-form");
+  const footer=document.getElementById("pr-footer");
+  if(portalEmp){
+    const bal=balance(portalEmp);
+    document.getElementById("pr-name").textContent=portalEmp.name;
+    document.getElementById("pr-detail").textContent=`${portalEmp.id} · ${portalEmp.dept} · ${portalEmp.position}`;
+    document.getElementById("pr-ent").textContent=portalEmp.entitled.toFixed(1)+" days";
+    document.getElementById("pr-bal").textContent=bal.toFixed(1)+" days";
+    document.getElementById("pr-bal").style.color=bal<0?"var(--red)":bal<=5?"var(--orange)":"var(--green)";
+    document.getElementById("pr-bal-box").style.background=bal<0?"#FFEBEE":bal<=5?"#FFF3E0":"#E8F5E9";
+    info.style.display="block"; form.style.display="block"; footer.style.display="flex";
+    portalCheck();
+    // Show request history
+    const myReqs=requests.filter(r=>r.empId===portalEmp.id).reverse();
+    const statusSec=document.getElementById("pr-status-section");
+    const statusList=document.getElementById("pr-status-list");
+    if(myReqs.length){
+      statusSec.style.display="block";
+      const sc={pending:"s-pending",approved:"s-approved",declined:"s-declined"};
+      statusList.innerHTML=myReqs.slice(0,5).map(r=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:9px;border:1px solid var(--border);border-radius:8px;margin-bottom:7px">
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:13px">${r.days} days · ${r.type}</div>
+            <div style="font-size:12px;color:var(--muted)">${r.month||""} · ${new Date(r.ts).toLocaleDateString()}</div>
+          </div>
+          <span class="status-badge ${sc[r.status]}">${r.status.toUpperCase()}</span>
+        </div>`).join("");
+    } else {
+      statusSec.style.display="none";
+    }
+  } else {
+    info.style.display="none"; form.style.display="none"; footer.style.display="none";
+    document.getElementById("pr-status-section").style.display="none";
+  }
+}
+
+function portalCheck(){
+  const days=parseFloat(document.getElementById("pr-days").value)||0;
+  const el=document.getElementById("pr-check-result");
+  if(!portalEmp||!days){el.style.display="none";return;}
+  const bal=balance(portalEmp), after=bal-days;
+  el.style.display="block";
+  if(after>=0){
+    el.style.background="#E8F5E9"; el.style.border="1px solid var(--green)";
+    el.innerHTML=`<span style="color:var(--green);font-weight:600">✅ You have sufficient balance</span> — ${after.toFixed(1)} days remaining after this request`;
+  } else {
+    el.style.background="#FFEBEE"; el.style.border="1px solid var(--red)";
+    el.innerHTML=`<span style="color:var(--red);font-weight:600">⚠ Insufficient balance</span> — you are short by ${Math.abs(after).toFixed(1)} days. You can still submit; HR will review.`;
+  }
+}
+
+function submitRequest(){
+  if(!portalEmp){toast("Select your employee ID first","error");return;}
+  const days=parseFloat(document.getElementById("pr-days").value)||0;
+  if(!days){toast("Enter days requested","error");return;}
+  const req={
+    id:"req_"+Date.now(),
+    empId:portalEmp.id,
+    days,
+    type:document.getElementById("pr-type").value,
+    month:document.getElementById("pr-month").value,
+    notes:document.getElementById("pr-notes").value,
+    status:"pending",
+    ts:Date.now()
+  };
+  requests.push(req); saveReq();
+  closeModal("portal-modal");
+  toast(`Request submitted for ${portalEmp.name.split(" ").pop()}!`,"success");
+  updateBadge();
+}
+
+// Check URL for portal mode
+if(window.location.search.includes("portal=1")){
+  window.addEventListener("DOMContentLoaded",()=>{ openPortalModal(); });
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT EXCEL
+// ═══════════════════════════════════════════════════════
+function exportExcel(){
+  // Dynamically load SheetJS then export
+  if(typeof XLSX === "undefined"){
+    var s=document.createElement("script");
+    s.src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+    s.onload=function(){ buildExcel(); };
+    s.onerror=function(){ exportCSV(); };
+    document.head.appendChild(s);
+    toast("Preparing Excel export…");
+  } else {
+    buildExcel();
+  }
+}
+
+function buildExcel(){
+  try{
+    var wb = XLSX.utils.book_new();
+    var MONTHS_LOCAL = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    // ── Sheet 1: Employee Data ──────────────────────────────────────────
+    var h1 = ["Emp ID","Name","Dept","Position","Entitled","Carry Fwd","Total Planned","AL Taken YTD","Balance"];
+    MONTHS_LOCAL.forEach(function(m){ h1.push("Act "+m); });
+    MONTHS_LOCAL.forEach(function(m){ h1.push("Plan "+m); });
+    var d1 = [h1];
+    employees.forEach(function(e){
+      var row=[e.id,e.name,e.dept,e.position,e.entitled,e.carry,
+        Math.round(planned(e)*10)/10, Math.round(taken(e)*10)/10, Math.round(balance(e)*10)/10];
+      MONTHS_LOCAL.forEach(function(m){ row.push(e.actual[m]||0); });
+      MONTHS_LOCAL.forEach(function(m){ row.push(e.planned[m]||0); });
+      d1.push(row);
+    });
+    // Totals row
+    var tot=["TOTAL","","","",""];
+    var totEnt=0,totCar=0,totPln=0,totTkn=0,totBal=0;
+    employees.forEach(function(e){ totEnt+=e.entitled; totCar+=e.carry; totPln+=planned(e); totTkn+=taken(e); totBal+=balance(e); });
+    tot.push(Math.round(totEnt*10)/10, Math.round(totPln*10)/10, Math.round(totTkn*10)/10, Math.round(totBal*10)/10);
+    MONTHS_LOCAL.forEach(function(m){ tot.push(Math.round(employees.reduce(function(s,e){return s+(e.actual[m]||0);},0)*10)/10); });
+    MONTHS_LOCAL.forEach(function(m){ tot.push(Math.round(employees.reduce(function(s,e){return s+(e.planned[m]||0);},0)*10)/10); });
+    d1.push(tot);
+    var ws1 = XLSX.utils.aoa_to_sheet(d1);
+    ws1["!cols"] = [{wch:9},{wch:28},{wch:10},{wch:26},{wch:10},{wch:10},{wch:11},{wch:11},{wch:10}];
+    for(var i=0;i<24;i++) ws1["!cols"].push({wch:6});
+    ws1["!freeze"] = {xSplit:4, ySplit:1};
+    XLSX.utils.book_append_sheet(wb, ws1, "Employee Data");
+
+    // ── Sheet 2: Dashboard Summary ──────────────────────────────────────
+    var d2 = [
+      ["SGR LEAVE MANAGEMENT DASHBOARD — 2026"],
+      [],
+      ["OVERALL KPIs"],
+      ["Total Staff", employees.length],
+      ["Total Entitlement (days)", Math.round(totEnt*10)/10],
+      ["AL Taken YTD (days)", Math.round(totTkn*10)/10],
+      ["Total Balance (days)", Math.round(totBal*10)/10],
+      ["Utilisation %", totPln>0?Math.round(totTkn/totPln*1000)/10+"%":"0%"],
+      ["Overdrawn Employees", employees.filter(function(e){return balance(e)<0;}).length],
+      [],
+      ["MONTHLY SUMMARY"],
+      ["Month","Planned Days","Actual Days","Variance","Utilisation %","Staff on Leave"]
+    ];
+    MONTHS_LOCAL.forEach(function(m){
+      var pln=Math.round(employees.reduce(function(s,e){return s+(e.planned[m]||0);},0)*10)/10;
+      var act=Math.round(employees.reduce(function(s,e){return s+(e.actual[m]||0);},0)*10)/10;
+      var staff=employees.filter(function(e){return (e.actual[m]||0)>0;}).length;
+      d2.push([m, pln, act, Math.round((act-pln)*10)/10, pln>0?Math.round(act/pln*1000)/10+"%":"0%", staff]);
+    });
+    d2.push([]);
+    d2.push(["DEPARTMENT BREAKDOWN"]);
+    d2.push(["Department","Staff","Entitlement","Taken","Balance","Overdrawn"]);
+    ["Admin","BAT","FMCG","Finance","LOGISTICS"].forEach(function(d){
+      var emps=employees.filter(function(e){return e.dept===d;});
+      if(!emps.length) return;
+      var ent=0,tkn=0,bal=0,od=0;
+      emps.forEach(function(e){ ent+=e.entitled; tkn+=taken(e); bal+=balance(e); if(balance(e)<0)od++; });
+      d2.push([d,emps.length,Math.round(ent*10)/10,Math.round(tkn*10)/10,Math.round(bal*10)/10,od]);
+    });
+    var ws2 = XLSX.utils.aoa_to_sheet(d2);
+    ws2["!cols"] = [{wch:22},{wch:14},{wch:14},{wch:14},{wch:14},{wch:14}];
+    XLSX.utils.book_append_sheet(wb, ws2, "Dashboard");
+
+    // ── Sheet 3: Plan vs Actual ─────────────────────────────────────────
+    var h3 = ["#","Emp ID","Name","Dept"];
+    MONTHS_LOCAL.forEach(function(m){ h3.push(m+" Plan"); h3.push(m+" Actual"); });
+    h3.push("Tot Plan","Tot Actual","Variance","Balance","Adherence %");
+    var d3 = [h3];
+    employees.forEach(function(e,i){
+      var row=[i+1,e.id,e.name,e.dept];
+      MONTHS_LOCAL.forEach(function(m){ row.push(e.planned[m]||0); row.push(e.actual[m]||0); });
+      var tp=planned(e),ta=taken(e),bal=balance(e);
+      row.push(Math.round(tp*10)/10, Math.round(ta*10)/10, Math.round((ta-tp)*10)/10,
+               Math.round(bal*10)/10, tp>0?Math.round(ta/tp*1000)/10+"%":"0%");
+      d3.push(row);
+    });
+    var ws3 = XLSX.utils.aoa_to_sheet(d3);
+    ws3["!cols"]=[{wch:4},{wch:9},{wch:22},{wch:9}];
+    for(var j=0;j<24;j++) ws3["!cols"].push({wch:6});
+    ws3["!cols"].push({wch:9},{wch:9},{wch:9},{wch:9},{wch:10});
+    ws3["!freeze"] = {xSplit:4, ySplit:1};
+    XLSX.utils.book_append_sheet(wb, ws3, "Plan vs Actual");
+
+    // ── Sheet 4: HR Analytics ───────────────────────────────────────────
+    var d4 = [["SGR HR ANALYTICS — 2026"],[]];
+    d4.push(["TOP 10 — HIGHEST BALANCES (carry-forward risk)"]);
+    d4.push(["Rank","Emp ID","Name","Dept","Entitlement","Taken","Balance","Utilisation %"]);
+    var top10=[].concat(employees).sort(function(a,b){return balance(b)-balance(a);}).slice(0,10);
+    top10.forEach(function(e,i){
+      d4.push([i+1,e.id,e.name,e.dept,e.entitled,Math.round(taken(e)*10)/10,
+        Math.round(balance(e)*10)/10, e.entitled>0?Math.round(taken(e)/e.entitled*1000)/10+"%":"0%"]);
+    });
+    d4.push([]);
+    d4.push(["OVERDRAWN EMPLOYEES"]);
+    var od=employees.filter(function(e){return balance(e)<0;});
+    if(od.length){
+      d4.push(["Emp ID","Name","Dept","Position","Entitlement","Taken","Balance"]);
+      od.forEach(function(e){ d4.push([e.id,e.name,e.dept,e.position,e.entitled,Math.round(taken(e)*10)/10,Math.round(balance(e)*10)/10]); });
+    } else { d4.push(["No overdrawn employees"]); }
+    d4.push([]);
+    d4.push(["ZERO LEAVE TAKEN — ACTION REQUIRED"]);
+    var zer=employees.filter(function(e){return taken(e)===0;});
+    d4.push(["Emp ID","Name","Dept","Position","Entitlement","Planned","Action"]);
+    zer.forEach(function(e){ d4.push([e.id,e.name,e.dept,e.position,e.entitled,Math.round(planned(e)*10)/10,planned(e)>0?"Plan set — not yet taken":"No plan — schedule urgently"]); });
+    d4.push([]);
+    d4.push(["MONTHLY CONCURRENCY RISK"]);
+    d4.push(["Month","Staff on Leave","Staff Planned","Days Actual","Days Planned","Risk"]);
+    MONTHS_LOCAL.forEach(function(m){
+      var as=employees.filter(function(e){return (e.actual[m]||0)>0;}).length;
+      var ps=employees.filter(function(e){return (e.planned[m]||0)>0;}).length;
+      var ad=employees.reduce(function(s,e){return s+(e.actual[m]||0);},0);
+      var pd=employees.reduce(function(s,e){return s+(e.planned[m]||0);},0);
+      d4.push([m,as,ps,Math.round(ad),Math.round(pd),as>15?"HIGH":as>7?"MEDIUM":"LOW"]);
+    });
+    var ws4 = XLSX.utils.aoa_to_sheet(d4);
+    ws4["!cols"]=[{wch:8},{wch:28},{wch:12},{wch:26},{wch:12},{wch:12},{wch:12},{wch:24}];
+    XLSX.utils.book_append_sheet(wb, ws4, "HR Analytics");
+
+    // ── Sheet 5: Leave Requests ─────────────────────────────────────────
+    if(requests.length){
+      var d5=[["Emp ID","Name","Dept","Days","Leave Type","Month/Period","Notes","Status","Date Submitted"]];
+      requests.slice().reverse().forEach(function(r){
+        var e=employees.find(function(x){return x.id===r.empId;})||{name:"Unknown",dept:""};
+        d5.push([r.empId,e.name,e.dept,r.days,r.type,r.month||"",r.notes||"",r.status.toUpperCase(),new Date(r.ts).toLocaleDateString()]);
+      });
+      var ws5=XLSX.utils.aoa_to_sheet(d5);
+      ws5["!cols"]=[{wch:9},{wch:26},{wch:10},{wch:6},{wch:16},{wch:16},{wch:20},{wch:10},{wch:14}];
+      XLSX.utils.book_append_sheet(wb, ws5, "Leave Requests");
+    }
+
+    // Write and download
+    var wbout = XLSX.write(wb, {bookType:"xlsx", type:"array"});
+    var blob  = new Blob([wbout], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    var url   = URL.createObjectURL(blob);
+    var a     = document.createElement("a");
+    a.href    = url;
+    a.download= "SGR_Leave_"+new Date().toISOString().slice(0,10)+".xlsx";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 300);
+    toast("Excel downloaded — "+wb.SheetNames.length+" tabs!", "success");
+
+  } catch(err){
+    console.error(err);
+    toast("Excel failed, downloading CSV instead…","error");
+    setTimeout(exportCSV, 500);
+  }
+}
+
+function exportCSV(){
+  var rows=[["Emp ID","Name","Dept","Position","Entitled","Carry Fwd","Taken YTD","Balance"]];
+  employees.forEach(function(e){
+    rows.push([e.id,e.name,e.dept,e.position,e.entitled,e.carry,Math.round(taken(e)*10)/10,Math.round(balance(e)*10)/10]);
+  });
+  var csv=rows.map(function(r){return r.map(function(c){var s=String(c||"");return s.indexOf(",")>-1?'"'+s+'"':s;}).join(",");}).join("\r\n");
+  var blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  var url=URL.createObjectURL(blob); var a=document.createElement("a");
+  a.href=url; a.download="SGR_Leave_"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},200);
+  toast("CSV downloaded","success");
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL + TOAST
+// ═══════════════════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add("open"); }
+function closeModal(id){ document.getElementById(id).classList.remove("open"); }
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",function(e){if(e.target===this)closeModal(this.id);}));
+document.addEventListener("click",e=>{
+  if(!e.target.closest("#chk-inp")&&!e.target.closest("#chk-dd")) document.getElementById("chk-dd").style.display="none";
+});
+
+function toast(msg,type=""){
+  const el=document.createElement("div");
+  el.className="toast "+(type||"");
+  el.innerHTML=`<span>${type==="success"?"✅":type==="error"?"❌":"ℹ️"}</span><span>${msg}</span>`;
+  document.getElementById("toasts").appendChild(el);
+  setTimeout(()=>{el.classList.add("out");setTimeout(()=>el.remove(),300)},3500);
+}
+
+
+function downloadFormatted(){
+  var b64="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";
+  try{
+    var bin=atob(b64);
+    var len=bin.length;
+    var bytes=new Uint8Array(len);
+    for(var i=0;i<len;i++){ bytes[i]=bin.charCodeAt(i); }
+    var blob=new Blob([bytes.buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement("a");
+    a.href=url; a.download="SGR_Leave_Dashboard_2026.xlsx";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},300);
+    toast("Formatted Excel downloaded!","success");
+  }catch(e){toast("Download failed: "+e.message,"error");}
+}
+
+// INIT
+renderDashboard();
+renderEmpTable();
+updateBadge();
+</script>
+</body>
+</html>
