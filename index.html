@@ -606,7 +606,11 @@ function selChk(id){
 function runChecker(){
   var days=parseFloat(document.getElementById("chk-days").value)||0;
   var r=document.getElementById("chk-result");
+  // Always re-fetch from live array so balance reflects latest updates
+  if(chkEmp) chkEmp=employees.find(function(e){return e.id===chkEmp.id;})||chkEmp;
   if(!chkEmp||!days){r.className="chk-result chk-idle";r.innerHTML='<div class="chk-verdict" style="color:var(--muted)">—</div><div style="font-size:13px;color:var(--muted)">Select employee and enter days</div>';return;}
+  // Also refresh the info panel with latest balance
+  document.getElementById("chk-sel-det").textContent=chkEmp.id+" · "+chkEmp.dept+" · Entitled (incl. CF): "+chkEmp.entitled+" · Taken YTD: "+tkn(chkEmp).toFixed(1)+" · Balance: "+bal(chkEmp).toFixed(1);
   var b=bal(chkEmp), after=b-days;
   if(after>=0){r.className="chk-result chk-ok";r.innerHTML='<div class="chk-verdict" style="color:var(--green)">✅ APPROVED</div><div style="font-size:13px">'+chkEmp.name.split(" ").pop()+' has <strong>'+b.toFixed(1)+' days</strong>. After request: <strong>'+after.toFixed(1)+' days remaining</strong></div>';}
   else{r.className="chk-result chk-no";r.innerHTML='<div class="chk-verdict" style="color:var(--red)">❌ DECLINED</div><div style="font-size:13px">'+chkEmp.name.split(" ").pop()+' only has <strong>'+b.toFixed(1)+' days</strong>. Short by <strong>'+Math.abs(after).toFixed(1)+' days</strong></div>';}
