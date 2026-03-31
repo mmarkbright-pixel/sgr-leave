@@ -453,7 +453,7 @@ function renderTable(){
   renderChips();
   var q=(document.getElementById("emp-search-inp")||{value:""}).value.toLowerCase();
   var list=employees.filter(function(e){
-    return (deptFilter==="All"||e.dept===deptFilter)&&(!q||e.name.toLowerCase().includes(q)||e.id.toLowerCase().includes(q)||e.position.toLowerCase().includes(q));
+    return (deptFilter==="All"||e.dept===deptFilter)&&(!q||e.name.toLowerCase().indexOf(q)>-1||e.id.toLowerCase().indexOf(q)>-1||e.position.toLowerCase().indexOf(q)>-1);
   });
   list.sort(function(a,b){
     var va=sortCol==="taken"?tkn(a):sortCol==="balance"?bal(a):(a[sortCol]||"");
@@ -461,14 +461,28 @@ function renderTable(){
     return typeof va==="string"?va.localeCompare(vb)*sortDir:(va-vb)*sortDir;
   });
   document.getElementById("emp-count").textContent=list.length+" employee"+(list.length!==1?"s":"");
-  document.getElementById("emp-tbody").innerHTML=list.map(function(e){
-    var t=tkn(e), b=bal(e), tot=e.entitled+e.carry, pct=tot>0?Math.min(100,t/tot*100):0;
+  var rows=list.map(function(e){
+    var t=tkn(e),b=bal(e),tot=e.entitled+e.carry,pct=tot>0?Math.min(100,t/tot*100):0;
     var bc=b<0?"var(--red)":b<=5?"var(--orange)":"var(--teal)";
     var vc=b<0?"neg":b===0?"zero":b<=5?"low":"pos";
-    var dots=MONTHS.map(function(m){var a=(e.actual[m]||0)>0,p=(e.planned[m]||0)>0;return'<div class="mdot '+( a&&p?"both":a?"act":p?"pln":"")+'" title="'+m+': Act '+( e.actual[m]||0)+' Plan '+( e.planned[m]||0)+'"></div>';}).join("");
-    return '<tr onclick="openEdit(\'"+e.id+"\')"><td><span style="font-size:11px;font-weight:700;color:var(--muted)">'+e.id+'</span></td><td><div class="emp-name">'+e.name+'</div><div class="emp-pos">'+e.position+'</div></td><td><span class="badge b-'+e.dept+'">'+e.dept+'</span></td><td style="text-align:center">'+e.entitled.toFixed(1)+'</td><td style="text-align:center;font-weight:600">'+t.toFixed(1)+'</td><td><div class="bal-wrap"><div class="bal-bar"><div class="bal-fill" style="width:'+Math.round(pct)+'%;background:'+bc+'"></div></div><div class="bal-num '+vc+'">'+b.toFixed(1)+'</div></div></td><td><div class="mdots">'+dots+'</div></td><td><button class="btn btn-sm btn-teal" onclick="event.stopPropagation();openEdit(\'"+e.id+"\')">Edit</button></td></tr>';
-  }).join()||'<tr><td colspan="8"><div class="empty"><div class="empty-icon">🔍</div><div>No employees found</div></div></td></tr>';
+    var dots=MONTHS.map(function(m){
+      var a=(e.actual[m]||0)>0,p=(e.planned[m]||0)>0;
+      return '<div class="mdot '+(a&&p?"both":a?"act":p?"pln":"")+'" title="'+m+': Act '+(e.actual[m]||0)+' Plan '+(e.planned[m]||0)+'"></div>';
+    }).join("");
+    return '<tr data-id="'+e.id+'" class="emp-row" style="cursor:pointer">'+
+      '<td><span style="font-size:11px;font-weight:700;color:var(--muted)">'+e.id+'</span></td>'+
+      '<td><div class="emp-name">'+e.name+'</div><div class="emp-pos">'+e.position+'</div></td>'+
+      '<td><span class="badge b-'+e.dept+'">'+e.dept+'</span></td>'+
+      '<td style="text-align:center">'+e.entitled.toFixed(1)+'</td>'+
+      '<td style="text-align:center;font-weight:600">'+t.toFixed(1)+'</td>'+
+      '<td><div class="bal-wrap"><div class="bal-bar"><div class="bal-fill" style="width:'+Math.round(pct)+'%;background:'+bc+'"></div></div><div class="bal-num '+vc+'">'+b.toFixed(1)+'</div></div></td>'+
+      '<td><div class="mdots">'+dots+'</div></td>'+
+      '<td><button class="btn btn-sm btn-teal edit-btn" data-id="'+e.id+'">Edit</button></td>'+
+      '</tr>';
+  }).join("");
+  document.getElementById("emp-tbody").innerHTML=rows||'<tr><td colspan="8"><div class="empty"><div class="empty-icon">🔍</div><div>No employees found</div></div></td></tr>';
 }
+
 function srt(col){ sortDir=sortCol===col?-sortDir:1; sortCol=col; renderTable(); }
 
 // ═══════════════════════════════════════════════════
@@ -556,6 +570,14 @@ function deleteEmp(){
 function closeModal(){ document.getElementById("emp-modal").classList.remove("open"); }
 document.getElementById("emp-modal").addEventListener("click",function(ev){if(ev.target===this)closeModal();});
 
+// Event delegation for employee table - handles both row click and Edit button
+document.getElementById("emp-tbody").addEventListener("click",function(ev){
+  var btn=ev.target.closest(".edit-btn");
+  var row=ev.target.closest(".emp-row");
+  var id=(btn&&btn.dataset.id)||(row&&row.dataset.id);
+  if(id) openEdit(id);
+});
+
 // ═══════════════════════════════════════════════════
 // LEAVE CHECKER
 // ═══════════════════════════════════════════════════
@@ -563,11 +585,14 @@ function chkSearch(){
   var q=document.getElementById("chk-inp").value.toLowerCase();
   var dd=document.getElementById("chk-dd");
   if(!q){dd.style.display="none";return;}
-  var m=employees.filter(function(e){return e.name.toLowerCase().includes(q)||e.id.toLowerCase().includes(q);}).slice(0,8);
+  var m=employees.filter(function(e){return e.name.toLowerCase().indexOf(q)>-1||e.id.toLowerCase().indexOf(q)>-1;}).slice(0,8);
   if(!m.length){dd.style.display="none";return;}
   dd.style.display="block";
-  dd.innerHTML=m.map(function(e){return'<div class="dd-item" onclick="selChk(\'"+e.id+"\')"><strong>'+e.name+'</strong> <span style="color:var(--muted);font-size:12px">'+e.id+" · Bal "+bal(e).toFixed(1)+'</span></div>';}).join("");
+  dd.innerHTML=m.map(function(e){
+    return '<div class="dd-item chk-item" data-id="'+e.id+'"><strong>'+e.name+'</strong> <span style="color:var(--muted);font-size:12px">'+e.id+" · Bal "+bal(e).toFixed(1)+'</span></div>';
+  }).join("");
 }
+
 function selChk(id){
   chkEmp=employees.find(function(e){return e.id===id;});
   document.getElementById("chk-dd").style.display="none";
@@ -585,7 +610,14 @@ function runChecker(){
   if(after>=0){r.className="chk-result chk-ok";r.innerHTML='<div class="chk-verdict" style="color:var(--green)">✅ APPROVED</div><div style="font-size:13px">'+chkEmp.name.split(" ").pop()+' has <strong>'+b.toFixed(1)+' days</strong>. After request: <strong>'+after.toFixed(1)+' days remaining</strong></div>';}
   else{r.className="chk-result chk-no";r.innerHTML='<div class="chk-verdict" style="color:var(--red)">❌ DECLINED</div><div style="font-size:13px">'+chkEmp.name.split(" ").pop()+' only has <strong>'+b.toFixed(1)+' days</strong>. Short by <strong>'+Math.abs(after).toFixed(1)+' days</strong></div>';}
 }
-document.addEventListener("click",function(ev){if(!ev.target.closest("#chk-inp")&&!ev.target.closest("#chk-dd"))document.getElementById("chk-dd").style.display="none";});
+document.addEventListener("click",function(ev){
+  if(!ev.target.closest("#chk-inp")&&!ev.target.closest("#chk-dd"))
+    document.getElementById("chk-dd").style.display="none";
+});
+document.getElementById("chk-dd").addEventListener("click",function(ev){
+  var item=ev.target.closest(".chk-item");
+  if(item) selChk(item.dataset.id);
+});
 
 // ═══════════════════════════════════════════════════
 // ANALYTICS
