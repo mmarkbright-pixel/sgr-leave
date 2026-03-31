@@ -236,9 +236,9 @@ html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);colo
               <th onclick="srt('id')">ID ↕</th>
               <th onclick="srt('name')">Name ↕</th>
               <th>Dept</th>
-              <th onclick="srt('entitled')">Entitled ↕</th>
-              <th onclick="srt('taken')">Taken YTD ↕</th>
-              <th onclick="srt('balance')">Balance ↕</th>
+              <th onclick="srt('entitled')" title="Total available days incl. carry fwd from 2025">Entitled (incl. CF) ↕</th>
+              <th onclick="srt('taken')" title="Actual leave taken year to date">Taken YTD ↕</th>
+              <th onclick="srt('balance')" title="Balance = Entitled − Taken YTD">Balance ↕</th>
               <th>Months</th>
               <th></th>
             </tr></thead>
@@ -321,9 +321,9 @@ html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);colo
     </div>
     <div class="modal-body">
       <div class="info-grid" id="m-info" style="display:none">
-        <div class="info-box"><div class="info-lbl">Entitlement</div><div class="info-val" id="m-ent"></div></div>
-        <div class="info-box"><div class="info-lbl">Carry Fwd (info only)</div><div class="info-val" id="m-carry"></div></div>
-        <div class="info-box" id="m-bal-box"><div class="info-lbl">Balance</div><div class="info-val" id="m-bal"></div></div>
+        <div class="info-box"><div class="info-lbl">Entitled (incl. carry fwd)</div><div class="info-val" id="m-ent"></div></div>
+        <div class="info-box"><div class="info-lbl">Carry Fwd 2025 (inside Entitled)</div><div class="info-val" id="m-carry"></div></div>
+        <div class="info-box" id="m-bal-box"><div class="info-lbl">Balance = Entitled − Taken</div><div class="info-val" id="m-bal"></div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:4px">
         <div class="fg"><label>Employee ID</label><input class="fc" id="fi-id" placeholder="e.g. SGR126"></div>
@@ -334,7 +334,7 @@ html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);colo
           </select>
         </div>
         <div class="fg"><label>Position</label><input class="fc" id="fi-pos" placeholder="Job title"></div>
-        <div class="fg"><label>Entitlement (days)</label><input type="number" class="fc" id="fi-ent" step="0.5" min="0"></div>
+        <div class="fg"><label>Entitled — total avail. days (incl. carry fwd)</label><input type="number" class="fc" id="fi-ent" step="0.5" min="0"></div>
         <div class="fg"><label>Carry Fwd 2025 (reference only)</label><input type="number" class="fc" id="fi-carry" step="0.5"></div>
       </div>
       <div class="sec-head"><span style="color:var(--teal)">●</span> Actual Leave Taken — by Month</div>
@@ -406,7 +406,7 @@ function renderDash(){
   var od=employees.filter(function(e){return bal(e)<0;}).length;
   document.getElementById("kpis").innerHTML=[
     {l:"Total Staff",v:employees.length,s:"employees",c:"c-navy"},
-    {l:"Total Entitlement",v:Math.round(totEnt),s:"working days",c:"c-teal"},
+    {l:"Total Entitled",v:Math.round(totEnt),s:"incl. carry fwd",c:"c-teal"},
     {l:"AL Taken YTD",v:Math.round(totTkn),s:"days taken",c:"c-green"},
     {l:"Total Balance",v:Math.round(totBal),s:"days remaining",c:"c-gold"},
     {l:"Utilisation",v:util+"%",s:"of plan taken",c:"c-orange"},
@@ -599,7 +599,7 @@ function selChk(id){
   document.getElementById("chk-inp").value=chkEmp.name;
   document.getElementById("chk-sel").style.display="block";
   document.getElementById("chk-sel-name").textContent=chkEmp.name;
-  document.getElementById("chk-sel-det").textContent=chkEmp.id+" · "+chkEmp.dept+" · Entitled: "+chkEmp.entitled+" · Taken: "+tkn(chkEmp).toFixed(1)+" · Balance: "+bal(chkEmp).toFixed(1);
+  document.getElementById("chk-sel-det").textContent=chkEmp.id+" · "+chkEmp.dept+" · Entitled (incl. CF): "+chkEmp.entitled+" · Taken YTD: "+tkn(chkEmp).toFixed(1)+" · Balance: "+bal(chkEmp).toFixed(1);
   runChecker();
 }
 function runChecker(){
