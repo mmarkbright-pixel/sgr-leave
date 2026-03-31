@@ -568,7 +568,16 @@ function deleteEmp(){
   save(); closeModal(); renderTable(); toast(e.name.split(" ").pop()+" removed");
 }
 
-function closeModal(){ document.getElementById("emp-modal").classList.remove("open"); }
+function closeModal(){
+  document.getElementById("emp-modal").classList.remove("open");
+  // Always refresh table when modal closes so grid stays in sync
+  if(document.getElementById("page-employees").classList.contains("active")){
+    renderTable();
+  }
+  if(document.getElementById("page-dashboard").classList.contains("active")){
+    renderDash();
+  }
+}
 document.getElementById("emp-modal").addEventListener("click",function(ev){if(ev.target===this)closeModal();});
 
 // Event delegation for employee table - handles both row click and Edit button
