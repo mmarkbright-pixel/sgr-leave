@@ -322,7 +322,7 @@ html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);colo
     <div class="modal-body">
       <div class="info-grid" id="m-info" style="display:none">
         <div class="info-box"><div class="info-lbl">Entitlement</div><div class="info-val" id="m-ent"></div></div>
-        <div class="info-box"><div class="info-lbl">Carry Forward</div><div class="info-val" id="m-carry"></div></div>
+        <div class="info-box"><div class="info-lbl">Carry Fwd (info only)</div><div class="info-val" id="m-carry"></div></div>
         <div class="info-box" id="m-bal-box"><div class="info-lbl">Balance</div><div class="info-val" id="m-bal"></div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:4px">
@@ -335,7 +335,7 @@ html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);colo
         </div>
         <div class="fg"><label>Position</label><input class="fc" id="fi-pos" placeholder="Job title"></div>
         <div class="fg"><label>Entitlement (days)</label><input type="number" class="fc" id="fi-ent" step="0.5" min="0"></div>
-        <div class="fg"><label>Carry Forward 2025</label><input type="number" class="fc" id="fi-carry" step="0.5"></div>
+        <div class="fg"><label>Carry Fwd 2025 (reference only)</label><input type="number" class="fc" id="fi-carry" step="0.5"></div>
       </div>
       <div class="sec-head"><span style="color:var(--teal)">●</span> Actual Leave Taken — by Month</div>
       <div class="mgrid" id="m-act"></div>
@@ -372,7 +372,7 @@ var chkEmp = null;
 
 const tkn   = function(e){ return MONTHS.reduce(function(s,m){return s+(e.actual[m]||0);},0); };
 const pln   = function(e){ return MONTHS.reduce(function(s,m){return s+(e.planned[m]||0);},0); };
-const bal   = function(e){ return (e.entitled||0)+(e.carry||0)-tkn(e); };
+const bal   = function(e){ return (e.entitled||0)-tkn(e); };
 const avatar= function(n){ var c=["1E3A5F","1F7A8C","7030A0","1A7A3C","E26B0A"],h=0; for(var i=0;i<n.length;i++) h=(h<<5)-h+n.charCodeAt(i); return c[Math.abs(h)%c.length]; };
 const initls= function(n){ return n.trim().split(/\s+/).slice(0,2).map(function(w){return w[0];}).join("").toUpperCase(); };
 
@@ -430,7 +430,7 @@ function renderDash(){
   var ods=employees.filter(function(e){return bal(e)<0;});
   if(ods.length) alerts.push({t:"red",m:ods.length+" overdrawn: "+ods.slice(0,3).map(function(e){return e.name.split(" ").pop();}).join(", ")+(ods.length>3?"…":"")});
   var hi=employees.filter(function(e){return bal(e)>30;});
-  if(hi.length) alerts.push({t:"orange",m:hi.length+" employees have >30 days balance — carry-forward risk"});
+  if(hi.length) alerts.push({t:"orange",m:hi.length+" employees have >30 days balance — high balance — carry-forward risk"});
   var noT=employees.filter(function(e){return tkn(e)===0;});
   if(noT.length) alerts.push({t:"muted",m:noT.length+" employees have taken no leave yet in 2026"});
   document.getElementById("alerts").innerHTML=alerts.length?alerts.map(function(a){
@@ -462,7 +462,7 @@ function renderTable(){
   });
   document.getElementById("emp-count").textContent=list.length+" employee"+(list.length!==1?"s":"");
   var rows=list.map(function(e){
-    var t=tkn(e),b=bal(e),tot=e.entitled+e.carry,pct=tot>0?Math.min(100,t/tot*100):0;
+    var t=tkn(e),b=bal(e),tot=e.entitled||0,pct=tot>0?Math.min(100,t/tot*100):0;
     var bc=b<0?"var(--red)":b<=5?"var(--orange)":"var(--teal)";
     var vc=b<0?"neg":b===0?"zero":b<=5?"low":"pos";
     var dots=MONTHS.map(function(m){
